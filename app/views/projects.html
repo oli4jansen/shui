@@ -1,0 +1,26 @@
+<div ng-if="projects.length > 0">
+	<a href="" ng-click="navigate('projects/new')" class="button small float-right">New project</a>
+	<input type="search" placeholder="Filter projects.." ng-model="searchText" class="float-right">
+
+	<table class="with-tbody">
+		<tr class="head">
+			<td class="center sortable" ng-click="predicate = 'openTasks + finishedTasks'; reverse=!reverse">Tasks</td>
+			<td class="center sortable" ng-click="predicate = 'openTasks'; reverse=!reverse">Unfinished</td>
+			<td class=" sortable" ng-click="predicate = 'name'; reverse=!reverse">Name</td>
+			<td>Participants</td>
+		</tr>
+		<tbody ng-repeat="project in projects | filter:searchText | orderBy:predicate:reverse">
+			<tr ng-click="navigate('projects/'+project.id+'/'+project.name)">
+				<td class="center"><span class="bullet gray">{{project.openTasks + project.finishedTasks}}</span></td>
+				<td class="center"><span class="bullet" ng-if="project.openTasks">{{project.openTasks}}</span></td>
+				<td class="important">{{project.name}}</td>
+				<td>{{project.participants}}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div ng-if="projects.length == 0" class="center padding">
+	<p>That's okay, you can start a new project in just a few clicks.</p><br><br><br><br>
+	<a href="" ng-click="navigate('projects/new')" class="button">Start new project</a>
+</div>

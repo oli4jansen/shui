@@ -1,0 +1,12 @@
+<table>
+	<tr class="head">
+		<td></td>
+		<td class="left">What happened</td>
+		<td class="right">Where did it happen</td>
+	</tr>
+	<tr ng-repeat="notification in notifications" ng-class="{ unread: notification.unread }" ng-click="navigate('projects/'+notification.project.id+'/'+notification.project.name)">
+		<td class="icon-holder"><i ng-class="notification.icon"></i></td>
+		<td class="left important">{{notification.description}}</td>
+		<td class="right">{{notification.project.name}}</td>
+	</tr>
+</table>

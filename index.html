@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html lang="en" ng-app="Shui">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<link href="http://fonts.googleapis.com/css?family=Roboto+Condensed:400,300" rel="stylesheet" type="text/css">
+	<link href="http://fonts.googleapis.com/css?family=Roboto:500,400,300" rel="stylesheet" type="text/css">
+	<link href="css/ionicons.min.css" rel="stylesheet" type="text/css">
+	<link href="css/ionic.css" rel="stylesheet" type="text/css">
+	<link href="css/ng-tags-input.min.css" rel="stylesheet" type="text/css">
+	
+	<link href="css/style.css" rel="stylesheet" type="text/css">
+	<title>Shui - Project Manager</title>
+</head>
+<body ng-class="{popupActive: popup}">
+
+	<div class="page-holder">
+		<header ng-if="pageTitle">
+			<h1>{{pageTitle}}</h1>
+			<p ng-if="pageSubTitle" class="pageSubTitle">{{pageSubTitle}}</p>
+		</header>
+
+		<nav ng-controller="menuController" ng-init="init()">
+			<ul ng-if="signedIn">
+				<li ng-click="navigate('notifications')" class="ion-ios7-bell-outline" ng-class="{active: menuState == 'notifications'}"><span>Notifications</span><div class="bullet" ng-if="notificationCount > 0">{{notificationCount}}</div></li>
+				<li ng-click="navigate('projects')" class="ion-ios7-folder-outline" ng-class="{active: menuState == 'projects'}"><span>Projects</span></li>
+				<li ng-click="navigate('settings')" class="ion-ios7-gear-outline" ng-class="{active: menuState == 'settings'}"><span>Settings</span></li>
+				<li ng-click="navigate('signin/signout')" class="ion-ios7-locked-outline"><span>Sign out</span></li>
+			</ul>
+
+			<ul ng-if="!signedIn">
+				<li class="ion-ios7-bell-outline disabled"><span>Notifications</span></li>
+				<li class="ion-ios7-folder-outline disabled"><span>Projects</span></li>
+				<li class="ion-ios7-gear-outline disabled"><span>Settings</span></li>
+				<li ng-click="navigate('signin')" class="ion-ios7-unlocked-outline" ng-class="{active: menuState == 'signin'}"><span>Sign in/up</span></li>
+			</ul>
+		</nav>
+
+		<div style="height:100%;" ng-if="paddingTop100"></div>
+
+		<div class="view-holder" ng-view ng-init="init()"></div>
+
+		<div class="footer">
+			&copy; 2014 Olivier Jansen
+		</div>
+
+	</div>
+
+	<popup ng-if="popup" data="popup"></popup>
+
+	<script type="text/javascript" src="libs/angular.min.js"></script>
+	<script type="text/javascript" src="libs/angular-route.min.js"></script>
+	<script type="text/javascript" src="libs/angular-animate.min.js"></script>
+    <script type="text/javascript" src="libs/angular-local-storage.min.js"></script>
+    <script type="text/javascript" src="libs/ng-tags-input.min.js"></script>
+
+	<script type="text/javascript" src="app.js"></script>
+
+	<script type="text/javascript" src="app/controllers/menuController.js"></script>
+	<script type="text/javascript" src="app/controllers/homeController.js"></script>
+	<script type="text/javascript" src="app/controllers/signInController.js"></script>
+	<script type="text/javascript" src="app/controllers/projectsController.js"></script>
+	<script type="text/javascript" src="app/controllers/projectController.js"></script>
+	<script type="text/javascript" src="app/controllers/newProjectController.js"></script>
+	<script type="text/javascript" src="app/controllers/settingsController.js"></script>
+	<script type="text/javascript" src="app/controllers/notificationsController.js"></script>
+
+	<script type="text/javascript" src="app/directives/popupDirective.js"></script>
+
+	<script type="text/javascript" src="app/factories/fileFactory.js"></script>
+	<script type="text/javascript" src="app/factories/userFactory.js"></script>
+	<script type="text/javascript" src="app/factories/projectFactory.js"></script>
+	<script type="text/javascript" src="app/factories/notificationFactory.js"></script>
+
+</body>
+</html>

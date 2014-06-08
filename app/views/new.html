@@ -1,0 +1,7 @@
+<form ng-submit="create()" class="center padding">
+	<input type="text" class="huge center" placeholder="Name of the project">
+
+	<tags-input ng-model="tags" allowed-tags-pattern=".+\@.+\..+" placeholder="Participants email addresses" add-on-space="true" add-on-enter="true" add-on-blur="true"></tags-input>
+
+	<input type="submit" value="Start project">
+</form>

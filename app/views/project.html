@@ -1,0 +1,135 @@
+<table class="summary-bar max-width-750">
+	<tr>
+		<td ng-click="showTab('participants')" ng-class="{ active: currentTab == tabs.participants }">
+			<i class="ion-ios7-people-outline"></i>{{project.participants.length}} participant<span ng-if="project.participants.length > 1">s</span>
+		</td>
+		<td ng-click="showTab('messages')" ng-class="{ active: currentTab == tabs.messages }">
+			<i class="ion-ios7-chatboxes-outline"></i>{{project.messages}} message<span ng-if="project.messages > 1">s</span>
+		</td>
+		<td ng-click="showTab('tasks')" ng-class="{ active: currentTab == tabs.tasks }">
+			<i class="ion-ios7-briefcase-outline"></i>{{project.openTasks + project.finishedTasks}} task<span ng-if="project.openTasks + project.finishedTasks > 1">s</span>
+		</td>
+		<td ng-click="showTab('files')" ng-class="{ active: currentTab == tabs.files }">
+			<i class="ion-ios7-copy-outline"></i>{{project.files}} file<span ng-if="project.files > 1">s</span>
+		</td>
+	</tr>
+</table>
+
+<div id="mainView">
+	<div ng-include="currentTab"></div>
+</div>
+
+<script type="text/ng-template" id="project-participants.html">
+	<div class="toolbar">
+		<input type="search" placeholder="Filter participants.." ng-model="searchText" class="float-left">
+		<a href="" ng-click="addParticipant()" class="button small float-right">Invite someone</a>
+	</div>
+
+	<table class="max-width-750">
+		<tr class="head">
+			<td>Name</td>
+			<td>Email</td>
+		</tr>
+		<tr ng-repeat="participant in project.participants | filter: searchText">
+			<td class="important">{{participant.name}}</td>
+			<td>{{participant.email}}</td>
+		</tr>
+	</table>
+
+</script>
+
+<script type="text/ng-template" id="project-tasks.html">
+
+	<div class="toolbar">
+		<input type="search" placeholder="Filter tasks.." ng-model="searchText" class="float-left">
+
+		<select class="small float-left" ng-model="selection">
+			<option value="all">All tasks</option>
+			<option value="mine">My tasks</option>
+			<option value="unfinished">Unfinished</option>
+			<option value="finished">Finished</option>
+		</select>
+
+		<a href="" ng-click="addTask()" class="button small float-right">New task</a>
+	</div>
+
+	<div class="item task" ng-repeat="task in tasks | taskSelection: selection | filter: searchText">
+		<div class="icon-holder">
+			<div class="icon green hollow" ng-if="task.finished">
+				<strong>{{task.hours}}</strong>
+				hour<span ng-if="task.hours > 1">s</span>
+			</div>
+			<div class="icon red hollow" ng-if="!task.finished">
+				not yet finished
+			</div>
+			<a class="button small" ng-click="finishTask(task)" ng-if="task.assignedTo.id === userData.id && !task.finished">Finish</a>
+		</div>
+
+
+		<div class="body">
+	  		<strong>{{task.name}}</strong> assigned to {{task.assignedTo.name}} <a ng-if="message.author.id == userData.id" ng-click="deleteMessage(message)" class="delete-button ion-trash-b"></a>
+	    	<p class="medium">{{task.description}}</p>
+		</div>
+	</div>
+
+</script>
+
+<script type="text/ng-template" id="project-messages.html">
+
+	<div class="toolbar">
+		<input type="search" placeholder="Filter messages.." ng-model="searchText" class="float-left">
+		<a href="" ng-click="addMessage()" class="button small float-right">New message</a>
+	</div>
+
+	<div class="item message" ng-repeat="message in messages | filter: searchText">
+		<div class="icon-holder">
+			<div class="icon orange hollow">
+				<strong>{{message.day}}</strong>
+				{{message.month}}
+			</div>
+			<a ng-click="showComments()" class="button small">Comments</a>
+		</div>
+
+
+		<div class="body">
+	  		<strong>{{message.author.name}}</strong> {{message.author.email}} <a ng-if="message.author.id == userData.id" ng-click="deleteMessage(message)" class="delete-button ion-trash-b"></a>
+	    	<p class="medium">{{message.body}}</p>
+		</div>
+	</div>
+
+</script>
+
+<script type="text/ng-template" id="project-files.html">
+
+	<div class="toolbar">
+		<input type="search" placeholder="Filter documents.." ng-model="searchText" class="float-left">
+
+		<select class="small float-left" ng-model="selection">
+			<option value="all" selected>All files</option>
+			<option value="document">Documents</option>
+			<option value="picture">Pictures</option>
+			<option value="video">Videos</option>
+			<option value="location">Locations</option>
+		</select>
+
+		<a href="" ng-click="addItem()" class="button small float-right">Add file</a>
+	</div>
+
+	<div class="item" ng-repeat="file in files | fileSelection: selection | filter: searchText">
+		<div class="icon-holder">
+			<a ng-href="{{file.url}}" target="_blank" class="icon logo {{file.provider.slug}}"></a>
+		</div>
+
+		<div class="body">
+	  		<strong><a ng-href="{{file.url}}" target="_blank">{{file.name}}</a></strong> {{file.type}} by {{file.author.name}}
+	    	<p class="medium">{{file.description}}</p>
+
+	    	<!-- Image preview -->
+	    	<img ng-if="file.type == 'picture'" ng-src="{{file.showableUrl}}">
+
+	    	<!-- Video preview -->
+	    	<iframe ng-if="file.type == 'video'" id="ytplayer" type="text/html" width="640" height="390" ng-src="{{file.showableUrl}}" frameborder="0"/>
+		</div>
+	</div>
+
+</script>

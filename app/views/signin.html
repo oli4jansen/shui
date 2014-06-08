@@ -1,0 +1,15 @@
+<div class="center" ng-if="!loading">
+
+	<p>You can also use this form to create a new account.</p>
+
+	<form class="signin-form" ng-submit="signIn()">
+		<input type="text" placeholder="Email" ng-model="formData.email">
+		<input type="password" placeholder="Password" ng-model="formData.password">
+		<input type="submit" class="medium" value="Sign in">
+	</form>
+
+</div>
+
+<div class="center padding" ng-if="loading">
+	<div class="padding spinner"><i class="ion-loading-d"></i></div>
+</div>

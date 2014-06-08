@@ -1,0 +1,96 @@
+tags-input *, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+tags-input .host {
+  position: relative;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+tags-input .host:active {
+  outline: none;
+}
+
+tags-input .tags {
+  overflow: hidden;
+  word-wrap: break-word;
+  cursor: text;
+
+  line-height: 50px;
+  margin: 10px 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  width: 100%;
+  background-color: transparent;
+  color: #333;
+
+}
+tags-input .tags.focused {
+  outline: none;
+  border-bottom: 2px solid #4285f4;
+  color: #4285f4;
+}
+tags-input .tags .tag-list {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+tags-input .tags .tag-item {
+	margin: 10px;
+	padding: 0 15px;
+	display: inline-block;
+	float: left;
+	font-family: "Roboto";
+	height: 50px;
+	color: #4285f4;
+	line-height: 45px;
+	font-size: 18px;
+	border: 2px solid #4285f4;
+	border-radius: 5px;
+}
+tags-input .tags .tag-item.selected {
+  background: #4285f4;
+  color: white;
+}
+tags-input .tags .tag-item .remove-button {
+  margin: 0 0 0 5px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  vertical-align: middle;
+  font: bold 16px Arial, sans-serif;
+  color: #4285f4;
+}
+tags-input .tags .tag-item.selected .remove-button {
+	color: white;
+}
+tags-input .tags .input {
+  border: 0;
+  outline: none;
+  margin: 2px;
+  padding: 0;
+  padding-left: 5px;
+  float: left;
+  height: 100%;
+
+
+  padding: 10px 15px;
+  font-size: 25px;
+  height: 70px;
+  line-height: 50px;
+  margin: 0;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  width: 100%;
+  background-color: transparent;
+  color: #333;
+}
+tags-input .tags .input.invalid-tag {
+  color: red;
+}
+tags-input .tags .input::-ms-clear {
+  display: none;
+}

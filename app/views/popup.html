@@ -1,0 +1,7 @@
+<div class="popup" ng-class="{show: show, head: data.head}">
+	<form class="popup-body" id="popup-body" data-ng-bind-html="data.content"></form>
+	<div class="popup-head" ng-class="{show: show}" ng-if="data.head">
+		<a ng-if="data.head.cancel" class="button gray small" ng-click="close()">{{data.head.cancel}}</a>
+		<a ng-if="data.head.action" class="button small" ng-click="action()">{{data.head.action}}</a>
+	</div>
+</div>

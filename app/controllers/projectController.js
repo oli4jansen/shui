@@ -20,11 +20,15 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 			if($scope.project.deadline) {
 				$scope.calculateTimeLeft();
 
-				if(project.daysLeft < 2) {
-					$rootScope.pageSubTitle = 'Deadline in '+project.hoursLeft+' hours and '+project.hoursMinutesLeft+' minutes';
+				if(!project.deadlinePassed) {
+					if(project.daysLeft < 3) {
+						$rootScope.pageSubTitle = 'Deadline in '+project.hoursLeft+' hours and '+project.hoursMinutesLeft+' minutes';
+					}else{
+						$rootScope.pageSubTitle = 'Deadline in '+project.daysLeft+' day';
+						if(project.daysLeft > 1) $rootScope.pageSubTitle = $rootScope.pageSubTitle + 's'
+					}
 				}else{
-					$rootScope.pageSubTitle = 'Deadline in '+project.daysLeft+' day';
-					if(project.daysLeft > 1) $rootScope.pageSubTitle = $rootScope.pageSubTitle + 's'
+					$rootScope.pageSubTitle = 'Deadline has passed.';
 				}
 			}
 		});
@@ -39,7 +43,13 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		var deadline = new Date($scope.project.deadline);
 		var today = new Date();
 
-		$scope.project.daysLeft = Math.round((today.getTime() - deadline.getTime())/(24*60*60*1000));
+		if(today.getTime() - deadline.getTime() > 0) {
+			$scope.project.deadlinePassed = true;
+		}else{
+			$scope.project.deadlinePassed = false;
+		}
+
+		$scope.project.daysLeft = Math.round(Math.abs((today.getTime() - deadline.getTime())/(24*60*60*1000)));
 		$scope.project.hoursLeft = Math.round(Math.abs((today.getTime() - deadline.getTime())/(60*60*1000)));
 		$scope.project.hoursMinutesLeft = Math.round(Math.abs((today.getTime() - deadline.getTime())/(60*1000))) - Math.floor(Math.abs((today.getTime() - deadline.getTime())/(60*60*1000)))*60;
 

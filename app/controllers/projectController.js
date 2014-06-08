@@ -216,16 +216,24 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 	$scope.addTask = function() {
 		var content = '<div class="padding">'+
-				'<input type="text" name="name" placeholder="Name of the task">'+
-				'<textarea rows="2" name="description" placeholder="Description of the task"></textarea>'+
-				'<select name="assignTo">'+
-					'<option>Assign this task to:</option>';
+						'<div class="item task">'+
+							'<div class="icon-holder">'+
+								'<div class="icon gray hollow">'+
+									'<strong>0</strong>hours'+
+								'</div>'+
+							'</div>'+
+							'<div class="body">'+
+						  		'<input type="text" class="small" placeholder="Name of the task" name="name">'+
+								'<select name="assignTo" class="small borderless">'+
+									'<option>Assign this task to</option>';
 
 		$scope.project.participants.forEach(function(person){
 			content = content + '<option value="'+person.id+'">'+person.name+' - '+person.email+'</option>';
 		});
 
-		content = content + '</select></div>';
+		content = content + 	'</select>'+
+						    	'<textarea placeholder="Write a description." class="medium" rows="2" name="description"></textarea>'+
+							'</div></div>';
 
 		$rootScope.popup = {
 			head: {
@@ -233,11 +241,12 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 				action: 'Add task',
 				callbackData: true,
 				callback: function(data) {
-					projectFactory.postNewTask($scope.project.id, $scope.userData.id, data.name, data.description, data.assignTo, function(error, task) {
+					projectFactory.postNewTask($scope.project.id, data.name, data.description, data.assignTo, function(error, task) {
 						if(!error){
 							$rootScope.popup = false;
 							console.log(task);
 							$scope.tasks.unshift(task);
+							alert('You\'re task was posted!');
 						}else{
 							alert('Something went wrong posting your task. Please reload the page and try again.');
 						}

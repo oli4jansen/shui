@@ -273,7 +273,7 @@ app.factory('projectFactory', function($rootScope, userFactory, fileFactory) {
 		}
 	};
 
-	factory.postNewTask = function(projectId, userId, name, description, assignTo, callback) {
+	factory.postNewTask = function(projectId, name, description, assignTo, callback) {
 		/*
 			Pass data + token to API
 		*/

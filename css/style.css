@@ -86,6 +86,7 @@ p.padding {
 .blue   { background-color: #4285f4; }
 .orange { background-color: #FF7510; }
 
+.hollow.gray    { color: #8D8D8D; border: 2px solid #8D8D8D; background-color: transparent; }
 .hollow.orange    { color: #FF7510; border: 2px solid #FF7510; background-color: transparent; }
 .hollow.red    { color: #FF3819; border: 2px solid #FF3819; background-color: transparent; }
 .hollow.green    { color: #0DBE19; border: 2px solid #0DBE19; background-color: transparent; }
@@ -224,6 +225,20 @@ select.small {
   border-radius: 5px;
   height: auto;
   line-height: normal;
+}
+select.small.borderless {
+  display: inline-block;
+  width: auto;
+  vertical-align: top;
+  -webkit-appearance: none;
+  appearance: none;
+  border: 0;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 20px;
+  height: auto;
+  margin: 0 0 10px;
+  padding: 0 15px;
 }
 
 input[type=text], input[type=password], input[type=number] {

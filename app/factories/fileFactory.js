@@ -12,8 +12,8 @@ app.factory('fileFactory', function($sce) {
 	factory.setURL = function(url) {
 		factory.URL = URL;
 		factory.provider = {};
-		factory.fileType = '';
-		factory.showableUrl = '';
+		factory.fileType = null;
+		factory.showableUrl = null;
 
 		factory.parsedURL = factory.parseUri(url);
 
@@ -65,7 +65,6 @@ app.factory('fileFactory', function($sce) {
 				factory.fileType = 'document';
 				break;
 
-
 			/*
 				Youtube videos
 			*/
@@ -74,6 +73,26 @@ app.factory('fileFactory', function($sce) {
 				factory.fileType = 'video';
 				factory.showableUrl =  $sce.trustAsResourceUrl('http://www.youtube.com/embed/'+factory.parsedURL.queryKey.v);
 				break;
+
+			case 'maps.google.com':
+				factory.provider = { name: 'Google Maps', slug: 'google-maps' };
+				factory.fileType = 'location';
+				var coords = factory.parsedURL.queryKey.sspn;
+				console.log(coords);
+				factory.showableUrl = 'http://maps.googleapis.com/maps/api/staticmap?center='+coords+'&zoom='+factory.parsedURL.queryKey.z+'&size=640x300&scale=2';
+		}
+
+		// Als er nu nog steeds niks matcht
+		if(!factory.fileType) {
+			// Google Maps URLs worden niet goed verwerkt
+
+			if(url.indexOf('www.google.com/maps') > -1) {
+				factory.provider = { name: 'Google Maps', slug: 'google-maps' };
+				factory.fileType = 'location';
+				var coords = factory.parsedURL.host.split(',');
+
+				factory.showableUrl =  'http://maps.googleapis.com/maps/api/staticmap?center='+coords[0]+','+coords[1]+'&zoom='+coords[2].substr(0, coords[2].length-1)+'&size=640x300&scale=2';
+			}
 		}
 	};
 

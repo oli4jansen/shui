@@ -125,7 +125,10 @@
 	    	<p class="medium">{{file.description}}</p>
 
 	    	<!-- Image preview -->
-	    	<img ng-if="file.type == 'picture'" ng-src="{{file.showableUrl}}">
+	    	<a ng-href="{{file.url}}" target="_blank"><img ng-if="file.type == 'picture'" ng-src="{{file.showableUrl}}"></a>
+	    	
+	    	<!-- Location preview -->
+	    	<a ng-href="{{file.url}}" target="_blank"><img ng-if="file.type == 'location'" ng-src="{{file.showableUrl}}"></a>
 
 	    	<!-- Video preview -->
 	    	<iframe ng-if="file.type == 'video'" id="ytplayer" type="text/html" width="640" height="390" ng-src="{{file.showableUrl}}" frameborder="0"/>

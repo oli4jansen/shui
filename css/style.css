@@ -595,6 +595,7 @@ popup:before {
   .icon.logo.empty { border-radius: 500px; }
   .icon.empty { border: 2px dashed rgba(0,0,0,0.2); color: rgba(0,0,0,0.2); }
   .icon.google-drive { background-image: url('../img/drive.png'); }
+  .icon.google-maps { background-image: url('../img/google-maps.png'); }
   .icon.dropbox { background-image: url('../img/dropbox.png'); }
   .icon.youtube { background-image: url('../img/youtube.png'); }
   .icon.skydrive { background-image: url('../img/skydrive.png'); }

@@ -323,7 +323,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 				'</div>'+
 				'<div class="body">'+
 			  		'<input type="text" class="medium" placeholder="New File Name" name="name">'+
-			  		'<input type="text" class="small" placeholder="URL to file" name="url">'+
+			  		'<input type="text" class="small" placeholder="URL to file/picture/video/location" name="url">'+
 			    	'<textarea placeholder="Write a description." class="medium" rows="4" name="description"></textarea>'+
 				'</div>'+
 			'</div>')

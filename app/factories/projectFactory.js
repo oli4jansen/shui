@@ -100,7 +100,7 @@ app.factory('projectFactory', function($rootScope, userFactory, fileFactory) {
 				email: 'barclaybarclay@gmail.com'
 			}],
 			messages: 17,
-			files: 4,
+			files: 5,
 			openTasks: 1,
 			finishedTasks: 2,
 			deadline: '2014-06-09 00:00:00',
@@ -218,6 +218,17 @@ app.factory('projectFactory', function($rootScope, userFactory, fileFactory) {
 			status: 200,
 			data: {
 				files: [{
+						id: 101,
+						created: '2014-06-10 01:11',
+						name: 'New York City',
+						description: 'NYC NYC NYC is Andi\'s favo city',
+						url: 'https://www.google.com/maps/place/New+York+City,+New+York/@40.7056308,-73.9780035,10z/data=!3m1!4b1!4m2!3m1!1s0x89c24fa5d33f083b:0xc80b8f06e177fe62',
+						author: {
+							id: 1,
+							name: 'Olivier Jansen',
+							email: 'oli4jansen.nl@gmail.com'
+						}
+					}, {
 						id: 90,
 						created: '2014-06-08 17:51:21',
 						name: 'Ja Man!',

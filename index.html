@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html lang="en" ng-app="Shui">
+<html lang="en" ng-app="Unify">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,7 +11,24 @@
 	<link href="css/ng-tags-input.min.css" rel="stylesheet" type="text/css">
 	
 	<link href="css/style.css" rel="stylesheet" type="text/css">
-	<title>Shui - Project Manager</title>
+
+	<link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+	<link rel="icon" type="image/png" href="/favicon-196x196.png" sizes="196x196">
+	<link rel="icon" type="image/png" href="/favicon-160x160.png" sizes="160x160">
+	<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+	<link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+	<link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+	<meta name="msapplication-TileColor" content="#ffffff">
+	<meta name="msapplication-TileImage" content="/mstile-144x144.png">
+	
+	<title>Unify - Project Manager</title>
 </head>
 <body ng-class="{popupActive: popup}">
 
@@ -21,28 +38,37 @@
 			<p ng-if="pageSubTitle" class="pageSubTitle">{{pageSubTitle}}</p>
 		</header>
 
-		<nav ng-controller="menuController" ng-init="init()">
-			<ul ng-if="signedIn">
-				<li ng-click="navigate('notifications')" class="ion-ios7-bell-outline" ng-class="{active: menuState == 'notifications'}"><span>Notifications</span><div class="bullet" ng-if="notificationCount > 0">{{notificationCount}}</div></li>
-				<li ng-click="navigate('projects')" class="ion-ios7-folder-outline" ng-class="{active: menuState == 'projects'}"><span>Projects</span></li>
-				<li ng-click="navigate('settings')" class="ion-ios7-gear-outline" ng-class="{active: menuState == 'settings'}"><span>Settings</span></li>
-				<li ng-click="navigate('signin/signout')" class="ion-ios7-locked-outline"><span>Sign out</span></li>
-			</ul>
+		<div ng-controller="menuController" ng-init="init()">
+			<nav class="left">
+				<ul ng-if="signedIn && menuState">
+					<li ng-click="navigate('notifications')" class="ion-ios7-bell-outline" ng-class="{active: menuState == 'notifications'}"><span>Notifications</span><div class="bullet" ng-if="notificationCount > 0">{{notificationCount}}</div></li>
+					<li ng-click="navigate('projects')" class="ion-ios7-folder-outline" ng-class="{active: menuState == 'projects'}"><span>Projects</span></li>
+					<li ng-click="navigate('settings')" class="ion-ios7-gear-outline" ng-class="{active: menuState == 'settings'}"><span>Settings</span></li>
+					<li ng-click="navigate('signin/signout')" class="ion-ios7-locked-outline"><span>Sign out</span></li>
+				</ul>
 
-			<ul ng-if="!signedIn">
-				<li class="ion-ios7-bell-outline disabled"><span>Notifications</span></li>
-				<li class="ion-ios7-folder-outline disabled"><span>Projects</span></li>
-				<li class="ion-ios7-gear-outline disabled"><span>Settings</span></li>
-				<li ng-click="navigate('signin')" class="ion-ios7-unlocked-outline" ng-class="{active: menuState == 'signin'}"><span>Sign in/up</span></li>
-			</ul>
-		</nav>
+				<ul ng-if="!signedIn">
+					<li class="ion-ios7-bell-outline disabled"><span>Notifications</span></li>
+					<li class="ion-ios7-folder-outline disabled"><span>Projects</span></li>
+					<li class="ion-ios7-gear-outline disabled"><span>Settings</span></li>
+					<li ng-click="navigate('signin')" class="ion-ios7-unlocked-outline" ng-class="{active: menuState == 'signin'}"><span>Sign in/up</span></li>
+				</ul>
+			</nav>
+
+			<nav class="right">
+				<ul ng-if="showProjectMenu">
+					<li ng-repeat="item in projectMenu.items" class="{{item.icon}}" ng-class="{ active: currentTab == item.name }" ng-click="projectMenuShowTab(item.name)"><span>{{item.name}}</span><div class="bullet {{item.color}}" ng-if="item.count">{{item.count}}</div></li>
+				</ul>
+			</nav>
+		</div>
 
 		<div style="height:100%;" ng-if="paddingTop100"></div>
 
 		<div class="view-holder" ng-view ng-init="init()"></div>
 
 		<div class="footer">
-			&copy; 2014 Olivier Jansen
+			<img src="img/logo-small.png"><br><br>
+			&copy; 2014 Unify
 		</div>
 
 	</div>
@@ -60,6 +86,8 @@
 	<script type="text/javascript" src="app/controllers/menuController.js"></script>
 	<script type="text/javascript" src="app/controllers/homeController.js"></script>
 	<script type="text/javascript" src="app/controllers/signInController.js"></script>
+	<script type="text/javascript" src="app/controllers/tutorialController.js"></script>
+	<script type="text/javascript" src="app/controllers/verificationController.js"></script>
 	<script type="text/javascript" src="app/controllers/projectsController.js"></script>
 	<script type="text/javascript" src="app/controllers/projectController.js"></script>
 	<script type="text/javascript" src="app/controllers/newProjectController.js"></script>
@@ -68,10 +96,12 @@
 
 	<script type="text/javascript" src="app/directives/popupDirective.js"></script>
 
+	<script type="text/javascript" src="app/factories/base64Factory.js"></script>
 	<script type="text/javascript" src="app/factories/fileFactory.js"></script>
 	<script type="text/javascript" src="app/factories/userFactory.js"></script>
 	<script type="text/javascript" src="app/factories/projectFactory.js"></script>
 	<script type="text/javascript" src="app/factories/notificationFactory.js"></script>
+	<script type="text/javascript" src="app/factories/projectMenuFactory.js"></script>
 
 </body>
 </html>

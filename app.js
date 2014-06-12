@@ -1,4 +1,4 @@
-var app = angular.module('Shui', ['ngRoute', 'ngAnimate', 'LocalStorageModule', 'ngTagsInput']).config(function($routeProvider) {
+var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule', 'ngTagsInput']).config(function($routeProvider) {
 
 	$routeProvider.when('/', {
 		templateUrl: 'app/views/home.html',
@@ -10,6 +10,13 @@ var app = angular.module('Shui', ['ngRoute', 'ngAnimate', 'LocalStorageModule', 
 	}).when('/signin/:action', {
 		templateUrl: 'app/views/signin.html',
 		controller:  'signInController'
+	}).when('/verification/:email?/:code?', {
+		templateUrl: 'app/views/verification.html',
+		controller:  'verificationController'
+
+	}).when('/tutorial', {
+		templateUrl: 'app/views/tutorial.html',
+		controller:  'tutorialController'
 
 	}).when('/notifications', {
 		templateUrl: 'app/views/notifications.html',
@@ -38,7 +45,7 @@ var app = angular.module('Shui', ['ngRoute', 'ngAnimate', 'LocalStorageModule', 
 	});
 
 }).run( function($rootScope, $location) {
-	$rootScope.protectedPages = ['/notifications', '/projects', '/projects/new', '/projects/:id/:name', '/settings'];
+	$rootScope.protectedPages = ['/notifications', '/projects', '/projects/new', '/projects/:id/:name', '/settings', '/tutorial'];
 
 	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
 
@@ -48,11 +55,14 @@ var app = angular.module('Shui', ['ngRoute', 'ngAnimate', 'LocalStorageModule', 
 			$rootScope.paddingTop100 = false;
 		}
 
-		if($rootScope.protectedPages.indexOf(next.$$route.originalPath) > -1 && $rootScope.signedIn !== true) {
+		$rootScope.$emit('projectMenuClear');
+
+		if(next.$$route && next.$$route.originalPath && $rootScope.protectedPages.indexOf(next.$$route.originalPath) > -1 && $rootScope.signedIn !== true) {
 
 			var oldPath = $location.path();
-
+			console.log(oldPath);
 			$location.path('/signin').search('redirect', oldPath);
+
 		}
 
     });
@@ -77,12 +87,14 @@ var app = angular.module('Shui', ['ngRoute', 'ngAnimate', 'LocalStorageModule', 
   };
 }).filter('taskSelection', ['userFactory', function(userFactory) {
   return function(input, selection) {
+	if(input == undefined) return [];
+
     if(selection == 'all') {
     	return input;
     }else if(selection == 'mine'){
     	var filtered = [];
     	input.forEach(function(item) {
-    		if(item.assignedTo.id == userFactory.userData.id) {
+    		if(item.assignedTo.email == userFactory.userData.email) {
     			filtered.push(item);
     		}
     	});
@@ -101,4 +113,4 @@ var app = angular.module('Shui', ['ngRoute', 'ngAnimate', 'LocalStorageModule', 
   };
 }]);
 
-angular.bootstrap(document.getElementById("document"), ['Shui']);
+angular.bootstrap(document.getElementById("document"), ['Unify']);

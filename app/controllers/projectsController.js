@@ -26,10 +26,8 @@ app.controller("projectsController", function($scope, $rootScope, userFactory, p
 
 				$scope.projects.push(project);
 			});
-
+			if($scope.projects.length == 0) $rootScope.pageTitle = 'You don\'t have any projects yet.';
 		});
-
-		if($scope.projects.length == 0) $rootScope.pageTitle = 'You don\'t have any projects yet.';
 	};
 
 });

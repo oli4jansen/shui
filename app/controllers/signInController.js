@@ -4,7 +4,10 @@ app.controller("signInController", function($scope, $rootScope, $routeParams, us
 	$rootScope.pageTitle = 'Please sign in.';
 	$rootScope.menuState = 'signin';
 
-	$scope.formData = {};
+	$scope.formData = {
+		email: 'oli4jansen.nl@gmail.com',
+		password: 'poep'
+	};
 
 	$scope.init = function() {
 		if($routeParams.action) {
@@ -20,8 +23,7 @@ app.controller("signInController", function($scope, $rootScope, $routeParams, us
 
 			var redirect = $routeParams.redirect || false;
 
-			$scope.loading = true;
-			$rootScope.pageTitle = 'Signing you in..';
+			$rootScope.loading = true;
 
 			userFactory.signIn($scope.formData.email, $scope.formData.password, redirect);
 		}else{

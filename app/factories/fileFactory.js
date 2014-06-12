@@ -74,17 +74,25 @@ app.factory('fileFactory', function($sce) {
 				factory.showableUrl =  $sce.trustAsResourceUrl('http://www.youtube.com/embed/'+factory.parsedURL.queryKey.v);
 				break;
 
+			/*
+				Old Google Maps
+			*/
 			case 'maps.google.com':
 				factory.provider = { name: 'Google Maps', slug: 'google-maps' };
 				factory.fileType = 'location';
 				var coords = factory.parsedURL.queryKey.sspn;
 				console.log(coords);
 				factory.showableUrl = 'http://maps.googleapis.com/maps/api/staticmap?center='+coords+'&zoom='+factory.parsedURL.queryKey.z+'&size=640x300&scale=2';
+
+			case 'www.evernote.com':
+				factory.provider = { name: 'Evernote', slug: 'evernote' };
+				factory.fileType = 'note';
+				break;
 		}
 
 		// Als er nu nog steeds niks matcht
 		if(!factory.fileType) {
-			// Google Maps URLs worden niet goed verwerkt
+			// Nieuwe Google Maps URLs worden niet goed verwerkt
 
 			if(url.indexOf('www.google.com/maps') > -1) {
 				factory.provider = { name: 'Google Maps', slug: 'google-maps' };

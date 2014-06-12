@@ -1,4 +1,4 @@
-app.controller("projectController", function($scope, $rootScope, $timeout, $routeParams, $sce, userFactory, projectFactory, fileFactory){
+app.controller("projectController", function($scope, $rootScope, $timeout, $routeParams, $sce, userFactory, projectFactory, fileFactory, projectMenuFactory, localStorageService){
 
 	// Titel van deze pagina
 	$rootScope.pageTitle = 'Loading project..';
@@ -12,23 +12,29 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		$rootScope.pageTitle = $routeParams.name;
 
 		projectFactory.getProject($routeParams.id, function(project){
+			if(!project) $rootScope.navigate('projects');
+
 			$scope.project = project;
 			$rootScope.pageTitle = project.name;
 
-			$scope.showTab('files');
+			$scope.redrawMenu();
+
+			projectMenuFactory.publish('showTab', 'files');
 
 			if($scope.project.deadline) {
 				$scope.calculateTimeLeft();
 
-				if(!project.deadlinePassed) {
-					if(project.daysLeft < 3) {
-						$rootScope.pageSubTitle = 'Deadline in '+project.hoursLeft+' hours and '+project.hoursMinutesLeft+' minutes';
+				if(project.deadlineValid) {
+					if(!project.deadlinePassed) {
+						if(project.daysLeft < 3) {
+							$rootScope.pageSubTitle = 'Deadline in '+project.hoursLeft+' hours and '+project.hoursMinutesLeft+' minutes';
+						}else{
+							$rootScope.pageSubTitle = 'Deadline in '+project.daysLeft+' day';
+							if(project.daysLeft > 1) $rootScope.pageSubTitle = $rootScope.pageSubTitle + 's'
+						}
 					}else{
-						$rootScope.pageSubTitle = 'Deadline in '+project.daysLeft+' day';
-						if(project.daysLeft > 1) $rootScope.pageSubTitle = $rootScope.pageSubTitle + 's'
+						$rootScope.pageSubTitle = 'Deadline has passed.';
 					}
-				}else{
-					$rootScope.pageSubTitle = 'Deadline has passed.';
 				}
 			}
 		});
@@ -38,24 +44,45 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		}
 	};
 
+	$scope.redrawMenu = function() {
+		projectMenuFactory.publish('projectMenuPopulate', [{
+				icon: 'ion-ios7-people-outline',
+				name: 'participants'
+			}, {
+				icon: 'ion-ios7-chatboxes-outline',
+				name: 'messages'
+			}, {
+				icon: 'ion-ios7-briefcase-outline',
+				count: $scope.project.myTasks,
+				color: '',
+				name: 'tasks'
+			}, {
+				icon: 'ion-ios7-copy-outline',
+				name: 'files'
+		}]);
+	};
+
 	$scope.calculateTimeLeft = function() {
 		var created = new Date($scope.project.created);
 		var deadline = new Date($scope.project.deadline);
 		var today = new Date();
 
-		if(today.getTime() - deadline.getTime() > 0) {
-			$scope.project.deadlinePassed = true;
-		}else{
-			$scope.project.deadlinePassed = false;
+		$scope.project.daysElapsed = (created.getTime() - today.getTime())/(24*60*60*1000);
+		$scope.project.deadlineValid = ( (deadline.getTime() - created.getTime()) / (24*60*60*1000) < 0) ? false : true;
+
+		if($scope.project.deadlineValid) {
+			if(today.getTime() - deadline.getTime() > 0) {
+				$scope.project.deadlinePassed = true;
+			}else{
+				$scope.project.deadlinePassed = false;
+			}
+
+			$scope.project.daysLeft = Math.round(Math.abs((today.getTime() - deadline.getTime())/(24*60*60*1000)));
+			$scope.project.hoursLeft = Math.round(Math.abs((today.getTime() - deadline.getTime())/(60*60*1000)));
+			$scope.project.hoursMinutesLeft = Math.round(Math.abs((today.getTime() - deadline.getTime())/(60*1000))) - Math.floor(Math.abs((today.getTime() - deadline.getTime())/(60*60*1000)))*60;
+
+			$scope.project.percentageTime = $scope.project.daysElapsed / ($scope.project.daysElapsed + $scope.project.daysLeft) * 100;
 		}
-
-		$scope.project.daysLeft = Math.round(Math.abs((today.getTime() - deadline.getTime())/(24*60*60*1000)));
-		$scope.project.hoursLeft = Math.round(Math.abs((today.getTime() - deadline.getTime())/(60*60*1000)));
-		$scope.project.hoursMinutesLeft = Math.round(Math.abs((today.getTime() - deadline.getTime())/(60*1000))) - Math.floor(Math.abs((today.getTime() - deadline.getTime())/(60*60*1000)))*60;
-
-		$scope.project.daysElapsed = Math.round(Math.abs((created.getTime() - today.getTime())/(24*60*60*1000)));
-
-		$scope.project.percentageTime = $scope.project.daysElapsed / ($scope.project.daysElapsed + $scope.project.daysLeft) * 100;
 	};
 
 	// De templates bevinden zich binnen project.html
@@ -65,6 +92,10 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		tasks: 'project-tasks.html',
 		files: 'project-files.html'
 	};
+
+	projectMenuFactory.subscribe('showTab', function(event, tab) {
+		$scope.showTab(tab);
+	});
 
 	// In deze functie bevind zich ook enige logica voor specifieke tabs
 	$scope.showTab = function(tab) {
@@ -76,6 +107,13 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					$scope.selection = 'mine';
 
 					projectFactory.getTasks($scope.project.id, function(tasks){
+						tasks.forEach(function (task) {
+							$scope.project.participants.forEach(function (participant) {
+								if(task.assignedTo == participant.email) task.assignedTo = participant;
+								if(task.assignedBy == participant.email) task.assignedBy = participant;
+							});
+						});
+
 						$scope.tasks = tasks.sort(function(a ,b){
 							if(a.finished && !b.finished) return 1;
 							if(b.finished && !a.finished) return -1;
@@ -99,6 +137,11 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 							message.day = created.getDate();
 							message.month = $scope.monthNames[created.getMonth()];
 
+							message.author = { name: message.author };
+							$scope.project.participants.forEach(function (participant) {
+								if(message.author.name == participant.email) message.author = participant;
+							});
+
 							$scope.messages.push(message);
 						});
 					});
@@ -111,6 +154,10 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					projectFactory.getFiles($scope.project.id, function(files){
 						files.forEach(function(file) {
 							file = $scope.parseFile(file);
+
+							$scope.project.participants.forEach(function (participant) {
+								if(file.author == participant.email) file.author = participant;
+							});
 							$scope.files.push(file);
 						});
 						$scope.files.sort(function(a, b) {
@@ -138,18 +185,21 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					if(data.evaluation !== undefined && data.hours !== undefined) {
 						$rootScope.popup = false;
 
-						if(projectFactory.finishTask(task.id, data.evaluation, data.hours)) {
-							var index = $scope.tasks.indexOf(task);
-							$scope.tasks[index].finished = true;
-							$scope.tasks[index].hours = data.hours;
+						projectFactory.finishTask($scope.project.id, task.id, data.evaluation, data.hours, function (err) {
+							if(!err) {
+								var index = $scope.tasks.indexOf(task);
+								$scope.tasks[index].finished = true;
+								$scope.tasks[index].hours = parseFloat(data.hours.replace(',', '.'));
 
-							$scope.project.finishedTasks++;
-							$scope.project.openTasks--;
+								if(task.assignedTo.email == userFactory.userData.email) {
+									$scope.project.myTasks--;
+									$scope.redrawMenu();
+								}
 
-							$scope.calculatePercentageTasks();
-						}else{
-							alert('Something went wrong.');
-						}
+							}else{
+								alert('Something went wrong.');
+							}
+						});
 					}else{
 						alert('Something went terribly wrong. We\'re sorry.');
 					}
@@ -162,19 +212,39 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		};
 	};
 
-	$scope.deleteMessage = function(message) {
-		projectFactory.deleteMessage(message.id, function(error, data) {
+	$scope.deleteTask = function(task) {
+		projectFactory.deleteTask($scope.project.id, task.id, function(error) {
 			if(!error){
+				var index = $scope.tasks.indexOf(task);
+				$scope.tasks.splice(index, 1);
+				if(!task.finished && task.assignedTo.email == userFactory.userData.email) {
+					$scope.project.myTasks--;
+					$scope.redrawMenu();
+				}
+			}else{
+				alert('Something went wrong deleting your task. Please reload the page and try again.');
+			}
+		});
+	};
 
-				console.log($scope.messages);
-
+	$scope.deleteMessage = function(message) {
+		projectFactory.deleteMessage($scope.project.id, message.id, function(error) {
+			if(!error){
 				var index = $scope.messages.indexOf(message);
 				$scope.messages.splice(index, 1);
-
-				console.log($scope.messages);
-
 			}else{
 				alert('Something went wrong deleting your message. Please reload the page and try again.');
+			}
+		});
+	};
+
+	$scope.deleteFile = function(file) {
+		projectFactory.deleteFile($scope.project.id, file.id, function(error) {
+			if(!error){
+				var index = $scope.files.indexOf(file);
+				$scope.files.splice(index, 1);
+			}else{
+				alert('Something went wrong deleting your file. Please reload the page and try again.');
 			}
 		});
 	};
@@ -198,12 +268,12 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 				action: 'Invite',
 				callbackData: true,
 				callback: function(data) {
-					projectFactory.invite(data.email, function(error){
-						if(!error) {
+					projectFactory.invite($scope.project.id, data.email, function(error, data){
+						if(!error && data) {
 							$rootScope.popup = false;
-							alert(data.email+' was successfully invited!');
+							$scope.project.participants.push(data);
 						}else{
-							alert('Something went terribly wrong. We\'re sorry.');
+							alert(error);
 						}
 					});
 				}
@@ -228,7 +298,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 									'<option>Assign this task to</option>';
 
 		$scope.project.participants.forEach(function(person){
-			content = content + '<option value="'+person.id+'">'+person.name+' - '+person.email+'</option>';
+			content = content + '<option value="'+person.email+'">'+person.name+' - '+person.email+'</option>';
 		});
 
 		content = content + 	'</select>'+
@@ -244,9 +314,16 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					projectFactory.postNewTask($scope.project.id, data.name, data.description, data.assignTo, function(error, task) {
 						if(!error){
 							$rootScope.popup = false;
-							console.log(task);
+							$scope.project.participants.forEach(function (participant) {
+								if(task.assignedTo == participant.email) {
+									task.assignedTo = participant;
+									$scope.project.myTasks++;
+									$scope.redrawMenu();
+								}
+								if(task.assignedBy == participant.email) task.assignedBy = participant;
+							});
+
 							$scope.tasks.unshift(task);
-							alert('You\'re task was posted!');
 						}else{
 							alert('Something went wrong posting your task. Please reload the page and try again.');
 						}
@@ -273,6 +350,10 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 							message.day = created.getDate();
 							message.month = $scope.monthNames[created.getMonth()];
 				
+							$scope.project.participants.forEach(function (participant) {
+								if(message.author == participant.email) message.author = participant;
+							});
+
 							$scope.messages.unshift(message);
 						}else{
 							alert('Something went wrong posting your message. Please reload the page and try again.');
@@ -309,7 +390,10 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 						if(!error){
 
 							$rootScope.popup = false;
-
+							
+							$scope.project.participants.forEach(function (participant) {
+								if(file.author == participant.email) file.author = participant;
+							});
 							$scope.files.unshift($scope.parseFile(file));
 						}else{
 							alert('Something went wrong posting your message. Please reload the page and try again.');
@@ -337,14 +421,13 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		file.provider = fileFactory.provider;
 		file.showableUrl = fileFactory.showableUrl;
 
-		console.log(file.showableUrl);
-
 		return file;
 	};
 
 	$scope.$on("$destroy", function() {
 		$rootScope.pageSubTitle = false;
 		$timeout.cancel();
+		projectMenuFactory.publish('projectMenuClear', {});
 	});
 
 });

@@ -1,0 +1,94 @@
+<div class="tutorial-button-holder">
+	<a ng-click="nextSlide()" class="button medium" ng-if="slide < 4">Next</a>
+	<a ng-click="navigate('projects')" class="button medium" ng-if="slide == 4">Start using Unify</a>
+	&nbsp;
+	<a ng-click="previousSlide()" class="button medium borderless" ng-if="slide !== 0">Previous</a>
+</div>
+
+<div class="home" ng-if="slide == 0">
+	<h1>Thank you for using Unify!</h1>
+	<p>Follow these quick steps to become a Unify-master.</p>
+</div>
+<div class="home" ng-if="slide == 1">
+	<h1>The left side menu is for you.</h1>
+	<p>Notifications, projects and settings can be found here.</p>
+</div>
+<div ng-if="slide == 2">
+	<div class="intro">
+		<div class="icon-slide icon-left">
+			<div class="icon-slide-icon">
+				<i class="ion-ios7-bell-outline"></i>
+			</div><div class="icon-slide-body">
+				<h1>Notifications.</h1>
+				<p>Keeps you up to date with what happens.</p>
+			</div>
+		</div>
+	</div>
+	<div class="intro">
+		<div class="icon-slide icon-right">
+			<div class="icon-slide-body">
+				<h1>Projects.</h1>
+				<p>An overview of all the projects you're working on.</p>
+			</div><div class="icon-slide-icon">
+				<i class="ion-ios7-folder-outline"></i>
+			</div>
+		</div>
+	</div>
+	<div class="intro">
+		<div class="icon-slide icon-left">
+			<div class="icon-slide-icon">
+				<i class="ion-ios7-gear-outline"></i>
+			</div><div class="icon-slide-body">
+				<h1>Settings.</h1>
+				<p>Change your preferences.</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="home" ng-if="slide == 3">
+	<h1>The right side menu is for your project.</h1>
+	<p>Participants, messages, tasks and files.</p>
+</div>
+<div ng-if="slide == 4">
+	<div class="intro">
+		<div class="icon-slide icon-left">
+			<div class="icon-slide-icon">
+				<i class="ion-ios7-people-outline"></i>
+			</div><div class="icon-slide-body">
+				<h1>Participants.</h1>
+				<p>Who's working with you on this project.</p>
+			</div>
+		</div>
+	</div>
+	<div class="intro">
+		<div class="icon-slide icon-right">
+			<div class="icon-slide-body">
+				<h1>Messages.</h1>
+				<p>A quick way to contact your participants.</p>
+			</div><div class="icon-slide-icon">
+				<i class="ion-ios7-chatboxes-outline"></i>
+			</div>
+		</div>
+	</div>
+	<div class="intro">
+		<div class="icon-slide icon-left">
+			<div class="icon-slide-icon">
+				<i class="ion-ios7-briefcase-outline"></i>
+			</div><div class="icon-slide-body">
+				<h1>Tasks.</h1>
+				<p>Divide your project intro assignable tasks.</p>
+			</div>
+		</div>
+	</div>
+	<div class="intro">
+		<div class="icon-slide icon-right">
+			<div class="icon-slide-body">
+				<h1>Files.</h1>
+				<p>Documents, pictures, videos, locations, you name it.</p>
+			</div><div class="icon-slide-icon">
+				<i class="ion-ios7-copy-outline"></i>
+			</div>
+		</div>
+	</div>
+</div>

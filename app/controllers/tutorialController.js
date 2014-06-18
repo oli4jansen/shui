@@ -3,7 +3,6 @@ app.controller("tutorialController", function($scope, $sce, $rootScope, localSto
 	// Titel van deze pagina
 	$rootScope.pageTitle = false;
 	$rootScope.menuState = false;
-	$rootScope.paddingTop100 = true;
 
 	$scope.slide = 0;
 

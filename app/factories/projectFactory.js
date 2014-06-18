@@ -4,7 +4,28 @@ app.factory('projectFactory', function($http, $rootScope, userFactory, fileFacto
 
 	factory.projects = [];
 
-	factory.API = 'http://192.168.10.61:3000';
+	factory.API = 'http://0.0.0.0:3000';
+
+	factory.createProject = function(name, participantsIn, callback) {
+
+		var participantsOut = [];
+
+		participantsIn.forEach(function (item) { participantsOut.push({ email: item.text }) });
+
+		$http({
+			method: 'POST',
+			url: factory.API+'/projects',
+			data: {
+				name: name,
+				participants: participantsOut
+			}
+		}).success(function(data, status, headers, config){
+			callback(false, data);
+		}).error(function(data, status, headers, config){
+			callback(data.msg, {});
+		});
+
+	};
 
 	factory.getProjects = function(callback) {
 
@@ -72,7 +93,6 @@ app.factory('projectFactory', function($http, $rootScope, userFactory, fileFacto
 		}).success(function(data, status, headers, config){
 			callback(data);
 		}).error(function(data, status, headers, config){
-			alert('Something went wrong while getting this project\'s files.');
 			callback([]);
 		});
 
@@ -132,6 +152,20 @@ app.factory('projectFactory', function($http, $rootScope, userFactory, fileFacto
 		}).error(function(data, status, headers, config){
 			alert('Something went wrong while creating the task.');
 			callback(true, {});
+		});
+
+	};
+
+	factory.deleteParticipant = function(projectId, participantId, callback) {
+
+		$http({
+			method: 'DELETE',
+			url: factory.API+'/projects/'+projectId+'/participants/'+participantId
+		}).success(function(data, status, headers, config){
+			callback(false);
+		}).error(function(data, status, headers, config){
+			alert('Something went wrong while deleting the participant.');
+			callback(true);
 		});
 
 	};

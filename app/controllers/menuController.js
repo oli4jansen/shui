@@ -1,7 +1,11 @@
-app.controller("menuController", function($scope, $rootScope, userFactory, notificationFactory, projectMenuFactory){
+app.controller("menuController", function($scope, $rootScope, $timeout, userFactory, notificationFactory, projectMenuFactory){
 
 	$scope.init = function() {
-		notificationFactory.updateNotificationCount();
+		$timeout(function () {
+			console.log('Updating notification count');
+			notificationFactory.updateNotificationCount();
+			$scope.init();
+		}, 5*60*1000);
 	};
 
 	$scope.showProjectMenu = false;
@@ -24,5 +28,12 @@ app.controller("menuController", function($scope, $rootScope, userFactory, notif
     $scope.projectMenuShowTab = function(tab) {
     	projectMenuFactory.publish('showTab', tab);
     };
+
+    	$scope.$on("$destroy", function() {
+		$rootScope.pageSubTitle = false;
+		$rootScope.backButton = false;
+		$timeout.cancel();
+		projectMenuFactory.publish('projectMenuClear', {});
+	});
 
 });

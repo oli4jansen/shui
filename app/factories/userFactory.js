@@ -9,7 +9,7 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 		clientSecret: 'N0TS0MUCH0FAS3CR3T'
 	};
 
-	factory.API = 'http://192.168.10.61:3000';
+	factory.API = 'http://0.0.0.0:3000';
 
 	factory.userData = {};
 
@@ -98,15 +98,18 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 	};
 
 	factory.getMeSuccess = function(data, status, headers, config, redirect) {
-		factory.userData = data;
+
 		console.log(data);
+
+		factory.userData = data;
+		$rootScope.notificationCount = data.unreadNotifications;
 		if(factory.userData.verified) {
 
 			$rootScope.signedIn = true;
 			if(factory.userData.name == '') {
 				$rootScope.navigate('tutorial');
 			}else if(redirect) {
-				$location.path(redirect);
+				$location.path(redirect).search('redirect', null);
 			}else{
 				$location.path('/projects');
 			}
@@ -140,14 +143,15 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 		$rootScope.navigate('');
 	};
 
-	factory.update = function(name, callback) {
+	factory.update = function(name, emailNotifications, callback) {
 		if(name == undefined || name == '') return callback('Your name was invalid', {});
 
 		$http({
 			method: 'POST',
 			url: factory.API+'/me',
 			data: {
-				name: name
+				name: name,
+				emailNotifications: emailNotifications
 			}
 		}).success(function(data, status, headers, config){
 			factory.userData = data;

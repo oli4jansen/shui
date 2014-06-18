@@ -1,6 +1,8 @@
-<form ng-submit="update(userData.name)" class="signin-form center">
+<form ng-submit="update(userData.name, userData.emailNotifications)" class="signin-form center">
 	<input type="text" ng-model="userData.name" ng-value="userData.name" placeholder="Your real name">
 	<input type="text" ng-value="userData.email" disabled>
+
+	<label class="checkbox label-input"><input type="checkbox" ng-checked="userData.emailNotifications" ng-model="userData.emailNotifications"> Receive email notifications</label>
 
 	<input type="submit" value="Update settings">
 </form>

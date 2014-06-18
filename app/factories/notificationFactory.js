@@ -1,84 +1,65 @@
-app.factory('notificationFactory', function($rootScope) {
+app.factory('notificationFactory', function($http, $rootScope, userFactory) {
 
 	var factory = {};
 
 	factory.notifications = [];
+	factory.API = 'http://0.0.0.0:3000';
 
 	factory.getNotifications = function(callback) {
-		/*
-		Call API
+		
+		$http({
+			method: 'GET',
+			url: factory.API+'/me/notifications'
+		}).success(function(data, status, header, config) {
 
-		To do: beveiliging verzinnen
-		*/
+			factory.notifications = data.sort(function(a ,b){
+				if(a.id < b.id) return 1;
+				if(b.id < a.id) return -1;
+				return 0;
+			});
 
-		factory.notifications = [{
-				project: {
-					id: 1,
-					name: 'Autonome Systemen met Kunstmatige Intelligentie'
-				},
-				author: {
-					id: 2,
-					name: 'Ari Saadon'
-				},
-				id: 1,
-				type: 'picture',
-				unread: true
-			}, {
-				project: {
-					id: 2,
-					name: 'Biologie PO'
-				},
-				author: {
-					id: 2,
-					name: 'Kevin Doan'
-				},
-				id: 2,
-				type: 'message',
-				unread: false
-			}, {
-				project: {
-					id: 2,
-					name: 'Biologie PO'
-				},
-				author: {
-					id: 2,
-					name: 'Andi Baaij'
-				},
-				id: 3,
-				type: 'location',
-				unread: false
-			}, {
-				project: {
-					id: 1,
-					name: 'Scriptie Deterministic Finite State Machines'
-				},
-				author: {
-					id: 2,
-					name: 'Ruben Steendam'
-				},
-				id: 4,
-				type: 'invite',
-				unread: false
-			}];
+			callback();
 
-		callback();
+		}).error(function(data, status, headers, config){
+			// THIS HAS TO BE HANDLED
+			alert(status);
+			alert(data);
+			console.log(data);
+
+			callback();
+		});
+	};
+
+	factory.getNotificationCount = function(callback) {
+		
+		$http({
+			method: 'GET',
+			url: factory.API+'/me/notifications/count'
+		}).success(function(data, status, header, config) {
+			console.log(data);
+
+			callback(data.count);
+		}).error(function(data, status, headers, config){
+			console.log(data);
+			callback(0);
+		});
+
 	};
 
 	factory.updateNotificationCount = function() {
+		factory.getNotificationCount(function(count) {
+			$rootScope.notificationCount = count;
+		});
+	};
 
-		var result = {
-			status: 200,
-			data: {
-				count: 1
-			}
-		};
-
-		if(result.status == 200) {
-			$rootScope.notificationCount = result.data.count;
-		}else{
-			$rootScope.notificationCount = 0;
-			console.log('Error: can\'t get notification count.');
-		}
+	factory.readNotifications = function() {
+		$http({
+			method: 'POST',
+			url: factory.API+'/me/notifications'
+		}).error(function(data, status, headers, config){
+			alert(data);
+			console.log(data);
+		});
 	};
 
 	return factory;

@@ -22,15 +22,12 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 		templateUrl: 'app/views/notifications.html',
 		controller:  'notificationsController'
 
-	}).when('/projects/:id/:name', {
-		templateUrl: 'app/views/project.html',
-		controller:  'projectController'
-	}).when('/projects/:id/:name/:view', {
-		templateUrl: 'app/views/project.html',
-		controller:  'projectController'
 	}).when('/projects/new', {
 		templateUrl: 'app/views/new.html',
 		controller:  'newProjectController'
+	}).when('/projects/:id/:name?/:view?', {
+		templateUrl: 'app/views/project.html',
+		controller:  'projectController'
 	}).when('/projects', {
 		templateUrl: 'app/views/projects.html',
 		controller:  'projectsController'
@@ -48,12 +45,6 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 	$rootScope.protectedPages = ['/notifications', '/projects', '/projects/new', '/projects/:id/:name', '/settings', '/tutorial'];
 
 	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
-
-		if($location.path() == '/') {
-			$rootScope.paddingTop100 = true;
-		}else{
-			$rootScope.paddingTop100 = false;
-		}
 
 		$rootScope.$emit('projectMenuClear');
 

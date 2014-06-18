@@ -9,9 +9,12 @@ app.controller("projectsController", function($scope, $rootScope, userFactory, p
 	$scope.reverse = 'false';
 
 	$scope.init = function() {
+		$rootScope.loading = true;
 		projectFactory.getProjects(function(){
 
 			projectFactory.projects.forEach(function(project) {
+
+				console.log(project.participants);
 
 				if(project.participants.length > 3) {
 					var more = project.participants.length - 2;
@@ -27,6 +30,7 @@ app.controller("projectsController", function($scope, $rootScope, userFactory, p
 				$scope.projects.push(project);
 			});
 			if($scope.projects.length == 0) $rootScope.pageTitle = 'You don\'t have any projects yet.';
+			$rootScope.loading = false;
 		});
 	};
 

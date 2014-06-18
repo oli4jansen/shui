@@ -2,6 +2,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 	// Titel van deze pagina
 	$rootScope.pageTitle = 'Loading project..';
+
 	$rootScope.menuState = 'projects';
 
 	$scope.project = {};
@@ -9,17 +10,20 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 	$scope.currentTab = '';
 
 	$scope.init = function() {
+
+		$rootScope.loading = true;
 		$rootScope.pageTitle = $routeParams.name;
 
 		projectFactory.getProject($routeParams.id, function(project){
-			if(!project) $rootScope.navigate('projects');
+			if(!project) {
+				alert('No project');
+				$rootScope.navigate('projects');
+			}
 
 			$scope.project = project;
 			$rootScope.pageTitle = project.name;
 
 			$scope.redrawMenu();
-
-			projectMenuFactory.publish('showTab', 'files');
 
 			if($scope.project.deadline) {
 				$scope.calculateTimeLeft();
@@ -37,15 +41,22 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					}
 				}
 			}
-		});
 
-		if($routeParams.view) {
-			$scope.showTab($routeParams.view);
-		}
+			$rootScope.loading = false;
+
+			$timeout(function () {
+				if($routeParams.view !== undefined) {
+					projectMenuFactory.publish('showTab', $routeParams.view);
+				}else{
+					projectMenuFactory.publish('showTab', 'files');
+				}
+			}, 10);
+
+		});
 	};
 
 	$scope.redrawMenu = function() {
-		projectMenuFactory.publish('projectMenuPopulate', [{
+		var menuItems = [{
 				icon: 'ion-ios7-people-outline',
 				name: 'participants'
 			}, {
@@ -54,12 +65,13 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 			}, {
 				icon: 'ion-ios7-briefcase-outline',
 				count: $scope.project.myTasks,
-				color: '',
+				color: 'gray',
 				name: 'tasks'
 			}, {
 				icon: 'ion-ios7-copy-outline',
 				name: 'files'
-		}]);
+		}];
+		projectMenuFactory.publish('projectMenuPopulate', menuItems);
 	};
 
 	$scope.calculateTimeLeft = function() {
@@ -68,7 +80,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		var today = new Date();
 
 		$scope.project.daysElapsed = (created.getTime() - today.getTime())/(24*60*60*1000);
-		$scope.project.deadlineValid = ( (deadline.getTime() - created.getTime()) / (24*60*60*1000) < 0) ? false : true;
+		$scope.project.deadlineValid = ( (deadline.getTime() - created.getTime()) / (24*60*60*1000) < 0 || deadline.getTime() == created.getTime()) ? false : true;
 
 		if($scope.project.deadlineValid) {
 			if(today.getTime() - deadline.getTime() > 0) {
@@ -93,12 +105,11 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		files: 'project-files.html'
 	};
 
-	projectMenuFactory.subscribe('showTab', function(event, tab) {
-		$scope.showTab(tab);
-	});
-
-	// In deze functie bevind zich ook enige logica voor specifieke tabs
 	$scope.showTab = function(tab) {
+		projectMenuFactory.publish('showTab', tab);
+	};
+
+	projectMenuFactory.subscribe('showTab', function(event, tab) {
 		if($scope.tabs[tab]) {
 			$scope.currentTab = $scope.tabs[tab];
 
@@ -106,12 +117,14 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 				case 'tasks':
 					$scope.selection = 'mine';
 
-					projectFactory.getTasks($scope.project.id, function(tasks){
+					projectFactory.getTasks($routeParams.id, function(tasks){
 						tasks.forEach(function (task) {
-							$scope.project.participants.forEach(function (participant) {
-								if(task.assignedTo == participant.email) task.assignedTo = participant;
-								if(task.assignedBy == participant.email) task.assignedBy = participant;
-							});
+							if($scope.project.participants !== undefined) {
+								$scope.project.participants.forEach(function (participant) {
+									if(task.assignedTo == participant.email) task.assignedTo = participant;
+									if(task.assignedBy == participant.email) task.assignedBy = participant;
+								});
+							}
 						});
 
 						$scope.tasks = tasks.sort(function(a ,b){
@@ -130,7 +143,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 					$scope.messages = [];
 
-					projectFactory.getMessages($scope.project.id, function(messages){
+					projectFactory.getMessages($routeParams.id, function(messages){
 						messages.forEach(function(message) {
 
 							var created = new Date(message.created);
@@ -138,9 +151,12 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 							message.month = $scope.monthNames[created.getMonth()];
 
 							message.author = { name: message.author };
-							$scope.project.participants.forEach(function (participant) {
-								if(message.author.name == participant.email) message.author = participant;
-							});
+
+							if($scope.project.participants !== undefined) {
+								$scope.project.participants.forEach(function (participant) {
+									if(message.author.name == participant.email) message.author = participant;
+								});
+							}
 
 							$scope.messages.push(message);
 						});
@@ -151,28 +167,32 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					$scope.files = [];
 					$scope.selection = 'all';
 
-					projectFactory.getFiles($scope.project.id, function(files){
-						files.forEach(function(file) {
-							file = $scope.parseFile(file);
+					if($routeParams.id) {
+						projectFactory.getFiles($routeParams.id, function(files){
+							files.forEach(function(file) {
+								file = $scope.parseFile(file);
 
-							$scope.project.participants.forEach(function (participant) {
-								if(file.author == participant.email) file.author = participant;
+								if($scope.project.participants !== undefined) {
+									$scope.project.participants.forEach(function (participant) {
+										if(file.author == participant.email) file.author = participant;
+									});
+								}
+								$scope.files.push(file);
 							});
-							$scope.files.push(file);
+							
+							$scope.files.sort(function(a, b) {
+								if (b.id < a.id) return -1;
+								if (b.id > a.id) return 1;
+								return 0;
+							});
 						});
-						$scope.files.sort(function(a, b) {
-							if (b.id < a.id) return -1;
-							if (b.id > a.id) return 1;
-							return 0;
-						});
-					});
+					}
 					break;
 			}
 
 		}
-	};
+	});
 
-    
 	$scope.finishTask = function(task) {
 		$rootScope.popup = {
 			title: task.name,
@@ -212,7 +232,39 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		};
 	};
 
-	$scope.deleteTask = function(task) {
+	$scope.deleteParticipant = function (participant) {
+		var participantName = participant.name+' ('+participant.email+')';
+		if(participant.email == $scope.userData.email) participantName = 'yourself';
+
+		$rootScope.popup = {
+			title: 'Remove participant',
+			head: {
+				cancel: 'Cancel',
+				action: 'Remove',
+				callbackData: true,
+				callback: function(data) {
+					$rootScope.popup = false;
+					projectFactory.deleteParticipant($scope.project.id, participant.email, function(error) {
+						if(!error){
+							if(participant.email == $scope.userData.email) {
+								$rootScope.navigate('projects');
+							}else{
+								var index = $scope.project.participants.indexOf(participant);
+								$scope.project.participants.splice(index, 1);								
+							}
+						}else{
+							alert('Something went wrong deleting this participant. Please reload the page and try again.');
+						}
+					});
+				}
+			},
+			content: $sce.trustAsHtml('<div class="padding">'+
+				'<p>Are you sure you want to remove '+participantName+' from the project?</p>'+
+				'</div>')
+		};
+	};
+
+	$scope.deleteTask = function (task) {
 		projectFactory.deleteTask($scope.project.id, task.id, function(error) {
 			if(!error){
 				var index = $scope.tasks.indexOf(task);
@@ -227,7 +279,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		});
 	};
 
-	$scope.deleteMessage = function(message) {
+	$scope.deleteMessage = function (message) {
 		projectFactory.deleteMessage($scope.project.id, message.id, function(error) {
 			if(!error){
 				var index = $scope.messages.indexOf(message);
@@ -317,13 +369,16 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 							$scope.project.participants.forEach(function (participant) {
 								if(task.assignedTo == participant.email) {
 									task.assignedTo = participant;
-									$scope.project.myTasks++;
-									$scope.redrawMenu();
 								}
 								if(task.assignedBy == participant.email) task.assignedBy = participant;
 							});
+							if(task.assignedTo == $scope.userData.email) {
+								$scope.project.myTasks++;
+								$scope.redrawMenu();
+							}
 
 							$scope.tasks.unshift(task);
+							$scope.selection = 'all';
 						}else{
 							alert('Something went wrong posting your task. Please reload the page and try again.');
 						}
@@ -426,6 +481,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 	$scope.$on("$destroy", function() {
 		$rootScope.pageSubTitle = false;
+		$rootScope.backButton = false;
 		$timeout.cancel();
 		projectMenuFactory.publish('projectMenuClear', {});
 	});

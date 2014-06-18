@@ -2,6 +2,10 @@
 	<div ng-include="currentTab"></div>
 </div>
 
+<div class="center padding" ng-if="loading">
+	<div class="padding spinner"><i class="ion-loading-d"></i></div>
+</div>
+
 <script type="text/ng-template" id="project-participants.html">
 	<div class="toolbar">
 		<input type="search" placeholder="Filter participants.." ng-model="searchText" class="float-left">
@@ -17,7 +21,7 @@
 		<tr ng-repeat="participant in project.participants | filter: searchText">
 			<td class="important">{{participant.name}}</td>
 			<td>{{participant.email}}</td>
-			<td><a ng-if="participant.email == userData.email" ng-click="deleteParticipant(participant)" class="delete-button ion-trash-b"></a></td>
+			<td><a ng-if="participant.email == userData.email || participant.invited_by == userData.email" ng-click="deleteParticipant(participant)" class="delete-button ion-trash-b"></a></td>
 		</tr>
 	</table>
 
@@ -77,7 +81,7 @@
 
 
 		<div class="body">
-	  		<strong>{{message.author.name}}</strong> {{message.author.email}} <a ng-if="message.author.id == userData.id" ng-click="deleteMessage(message)" class="delete-button ion-trash-b"></a>
+	  		<strong>{{message.author.name}}</strong> {{message.author.email}} <a ng-if="message.author.email == userData.email" ng-click="deleteMessage(message)" class="delete-button ion-trash-b"></a>
 	    	<p class="medium">{{message.body}}</p>
 		</div>
 	</div>

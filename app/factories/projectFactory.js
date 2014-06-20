@@ -4,7 +4,7 @@ app.factory('projectFactory', function($http, $rootScope, userFactory, fileFacto
 
 	factory.projects = [];
 
-	factory.API = 'http://0.0.0.0:3000';
+	factory.API = 'http://oli4jansen.nl:81';
 
 	factory.createProject = function(name, participantsIn, callback) {
 

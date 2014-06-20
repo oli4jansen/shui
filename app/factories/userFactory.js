@@ -9,7 +9,7 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 		clientSecret: 'N0TS0MUCH0FAS3CR3T'
 	};
 
-	factory.API = 'http://0.0.0.0:3000';
+	factory.API = 'http://oli4jansen.nl:81';
 
 	factory.userData = {};
 

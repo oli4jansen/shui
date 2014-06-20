@@ -3,7 +3,7 @@ app.factory('notificationFactory', function($http, $rootScope, userFactory) {
 	var factory = {};
 
 	factory.notifications = [];
-	factory.API = 'http://0.0.0.0:3000';
+	factory.API = 'http://oli4jansen.nl:81';
 
 	factory.getNotifications = function(callback) {
 		

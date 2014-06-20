@@ -13,10 +13,17 @@ app.controller("tutorialController", function($scope, $sce, $rootScope, localSto
 					action: 'Save',
 					callbackData: true,
 					callback: function(data) {
-						$rootScope.popup = false;
-						userFactory.update(data.name, function(error){
-							if(error) alert('Something went wrong while we were saving your name.');
-						});
+						if(data.name !== '') {
+							userFactory.update(data.name, userFactory.userData.emailNotifications, function(error){
+								if(error) {
+									alert(error);
+								}else{
+									$rootScope.popup = false;								
+								}
+							});
+						}else{
+							alert('Please use a name that is recognizable for other people.');
+						}
 					}
 				},
 				content: $sce.trustAsHtml('<div class="padding">'+

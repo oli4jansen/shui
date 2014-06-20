@@ -1,11 +1,13 @@
 <div class="center" ng-if="!loading">
 
-	<p>You can also use this form to create a new account.</p>
+	<p ng-if="!showForgotPassword && !showResetPassword">You can also use this form to create a new account.</p>
 
 	<form class="signin-form" ng-submit="signIn()">
-		<input type="text" placeholder="Email" ng-model="formData.email">
-		<input type="password" placeholder="Password" ng-model="formData.password">
-		<input type="submit" class="medium" value="Sign in">
+		<input type="text" placeholder="Email" ng-model="formData.email" ng-if="!showResetPassword">
+		<input type="password" placeholder="Password" ng-model="formData.password" ng-if="!showForgotPassword">
+		<input type="submit" class="medium" value="Sign in" ng-if="!showForgotPassword && !showResetPassword"><br>
+		<input type="button" class="button borderless small" value="Forgot password" ng-if="!showForgotPassword && !showResetPassword" ng-click="forgotPassword()">
+		<input type="button" class="button medium" value="Reset password" ng-if="showForgotPassword || showResetPassword" ng-click="forgotPassword()">
 	</form>
 
 </div>

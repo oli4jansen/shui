@@ -2,8 +2,7 @@ app.controller("menuController", function($scope, $rootScope, $timeout, userFact
 
 	$scope.init = function() {
 		$timeout(function () {
-			console.log('Updating notification count');
-			notificationFactory.updateNotificationCount();
+			if($rootScope.signedIn) notificationFactory.updateNotificationCount();
 			$scope.init();
 		}, 5*60*1000);
 	};
@@ -29,7 +28,7 @@ app.controller("menuController", function($scope, $rootScope, $timeout, userFact
     	projectMenuFactory.publish('showTab', tab);
     };
 
-    	$scope.$on("$destroy", function() {
+    $scope.$on("$destroy", function() {
 		$rootScope.pageSubTitle = false;
 		$rootScope.backButton = false;
 		$timeout.cancel();

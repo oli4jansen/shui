@@ -33,8 +33,7 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 				factory.getMeSuccess(data, status, headers, config, redirect);
 			}).error(function(data, status, headers, config){
 				localStorageService.set('token', null);
-				alert(status);
-				console.log(data);
+				console.log('Access token afgekeurd, maak een nieuwe aan.');
 			});
 		}
 	};
@@ -155,6 +154,31 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 			}
 		}).success(function(data, status, headers, config){
 			factory.userData = data;
+			callback(false);
+		}).error(function(data, status, headers, config){
+			callback(data.msg);
+		});
+	};
+
+	factory.requestResetPassword = function(email, callback) {
+		$http({
+			method: 'GET',
+			url: factory.API+'/forgotpass/'+email
+		}).success(function(data, status, headers, config){
+			callback(false);
+		}).error(function(data, status, headers, config){
+			callback(data.msg);
+		});
+	};
+
+	factory.resetPassword = function(email, password, code, callback) {
+		$http({
+			method: 'POST',
+			url: factory.API+'/forgotpass/'+email+'/'+code,
+			data: {
+				password: password
+			}
+		}).success(function(data, status, headers, config){
 			callback(false);
 		}).error(function(data, status, headers, config){
 			callback(data.msg);

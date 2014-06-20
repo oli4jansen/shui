@@ -1,4 +1,5 @@
 app.directive('popup', function($rootScope, $timeout) {
+  //  This is an awful directive, please forgive me. One day the time will come for me to rewrite this monster.
   return {
     restrict: 'E',
     scope: {
@@ -30,7 +31,11 @@ app.directive('popup', function($rootScope, $timeout) {
         }else{
           $rootScope.popup = false;
         }
-      }
+      };
+
+      scope.actionKey = function($event) {
+        if($event.keyCode == 13) scope.action();
+      };
     }
   }
 });

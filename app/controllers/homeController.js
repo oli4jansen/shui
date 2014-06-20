@@ -4,8 +4,9 @@ app.controller("homeController", function($scope, $rootScope, localStorageServic
 	$rootScope.pageTitle = false;
 	$rootScope.menuState = 'home';
 
-	$scope.currentWord = 'project';
-	$scope.words = ['project', 'research', 'collaborations', 'school assignments', 'graduation project'];
+	$scope.currentWord = 'collaboration';
+//	$scope.words = ['project', 'research', 'collaborations', 'school assignments', 'graduation project'];
+	$scope.words = ['collaboration', 'efficiency', 'communication', 'linking', 'maintaining overview'];
 	$scope.animate = false;
 
 	$scope.init = function() {

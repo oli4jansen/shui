@@ -4,17 +4,17 @@
 
 	<table class="with-tbody">
 		<tr class="head">
-			<td class="center sortable" ng-click="predicate = 'openTasks'; reverse=!reverse">Open tasks</td>
-			<td class="center sortable" ng-click="predicate = 'myTasks'; reverse=!reverse">My open tasks</td>
 			<td class=" sortable" ng-click="predicate = 'name'; reverse=!reverse">Name</td>
 			<td>Participants</td>
+			<td class="center sortable" ng-click="predicate = 'openTasks'; reverse=!reverse">Open tasks</td>
+			<td class="center sortable" ng-click="predicate = 'myTasks'; reverse=!reverse">My open tasks</td>
 		</tr>
 		<tbody ng-repeat="project in projects | filter:searchText | orderBy:predicate:reverse">
 			<tr ng-click="navigate('projects/'+project.id+'/'+project.name)">
-				<td class="center"><span class="bullet gray">{{project.openTasks}}</span></td>
-				<td class="center"><span class="bullet" ng-class="{ gray: project.myTasks == 0}">{{project.myTasks}}</span></td>
 				<td class="important">{{project.name}}</td>
 				<td>{{project.participants}}</td>
+				<td class="center"><span class="bullet gray">{{project.openTasks}}</span></td>
+				<td class="center"><span class="bullet" ng-class="{ gray: project.myTasks == 0}">{{project.myTasks}}</span></td>
 			</tr>
 		</tbody>
 	</table>

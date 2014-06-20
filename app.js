@@ -10,6 +10,9 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 	}).when('/signin/:action', {
 		templateUrl: 'app/views/signin.html',
 		controller:  'signInController'
+	}).when('/resetpass/:email/:code', {
+		templateUrl: 'app/views/signin.html',
+		controller:  'signInController'
 	}).when('/verification/:email?/:code?', {
 		templateUrl: 'app/views/verification.html',
 		controller:  'verificationController'

@@ -89,14 +89,14 @@ p.padding {
 .blue   { background-color: #4285f4; }
 .orange { background-color: #FF7510; }
 
-i.gray   { background-color: transparent; color: #8D8D8D; }
-i.black  { background-color: transparent; color: #2B2B2B; }
-i.red    { background-color: transparent; color: #FF3819; }
-i.pink   { background-color: transparent; color: #FF2A68; }
-i.yellow { background-color: transparent; color: #FFCD02; }
-i.green  { background-color: transparent; color: #0DBE19; }
-i.blue   { background-color: transparent; color: #4285f4; }
-i.orange { background-color: transparent; color: #FF7510; }
+i.gray, h2.gray     { background-color: transparent; color: #8D8D8D; }
+i.black, h2.black   { background-color: transparent; color: #2B2B2B; }
+i.red, h2.red       { background-color: transparent; color: #FF3819; }
+i.pink, h2.pink     { background-color: transparent; color: #FF2A68; }
+i.yellow, h2.yellow { background-color: transparent; color: #FFCD02; }
+i.green, h2.green   { background-color: transparent; color: #0DBE19; }
+i.blue, h2.blue     { background-color: transparent; color: #4285f4; }
+i.orange, h2.orange { background-color: transparent; color: #FF7510; }
 
 .hollow.gray    { color: #8D8D8D; border: 2px solid #8D8D8D; background-color: transparent; }
 .hollow.orange    { color: #FF7510; border: 2px solid #FF7510; background-color: transparent; }
@@ -431,13 +431,13 @@ table {
   margin: 0;
   width: 100%;
 }
-  table tr { width: 100%; cursor: pointer; border-bottom: 1px solid rgba(0,0,0,0.05); }
+  table tr { width: 100%; cursor: pointer; border-bottom: 2px solid rgba(0,0,0,0.05); }
   table tr:last-child { border-bottom: 0; }
 
   table.with-tbody tbody tr { border-bottom: 0; }
-  table.with-tbody tbody { border-bottom: 1px solid rgba(0,0,0,0.05); }
+  table.with-tbody tbody { border-bottom: 2px solid rgba(0,0,0,0.05); }
   table.with-tbody tbody:last-child { border-bottom: 0; }
-  table.with-tbody tr.head { border-bottom: 1px solid rgba(0,0,0,0.05); }
+  table.with-tbody tr.head { border-bottom: 2px solid rgba(0,0,0,0.05); }
 
   table tr.head { font-weight: 500; cursor: default; }
   table tr.head td { background-color: white !important; }

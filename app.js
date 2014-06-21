@@ -20,6 +20,9 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 	}).when('/tutorial', {
 		templateUrl: 'app/views/tutorial.html',
 		controller:  'tutorialController'
+	}).when('/help/:category?', {
+		templateUrl: 'app/views/help.html',
+		controller:  'helpController'
 
 	}).when('/notifications', {
 		templateUrl: 'app/views/notifications.html',
@@ -45,16 +48,18 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 	});
 
 }).run( function($rootScope, $location) {
-	$rootScope.protectedPages = ['/notifications', '/projects', '/projects/new', '/projects/:id/:name', '/settings', '/tutorial'];
+
+	console.log('RUN');
+
+	$rootScope.protectedPages = ['/notifications', '/projects', '/projects/new', '/projects/:id/:name?/:view?', '/settings', '/tutorial'];
 
 	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
 
 		$rootScope.$emit('projectMenuClear');
 
-		if(next.$$route && next.$$route.originalPath && $rootScope.protectedPages.indexOf(next.$$route.originalPath) > -1 && $rootScope.signedIn !== true) {
+		if(next.$$route && next.$$route.originalPath && $rootScope.protectedPages.indexOf(next.$$route.originalPath) > -1 && !$rootScope.signedIn) {
 
 			var oldPath = $location.path();
-			console.log(oldPath);
 			$location.path('/signin').search('redirect', oldPath);
 
 		}

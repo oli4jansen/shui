@@ -14,45 +14,47 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		$rootScope.loading = true;
 		$rootScope.pageTitle = $routeParams.name;
 
-		projectFactory.getProject($routeParams.id, function(project){
-			if(!project) {
-				alert('No project');
-				$rootScope.navigate('projects');
-			}
+		if($rootScope.signedIn) {
 
-			$scope.project = project;
-			$rootScope.pageTitle = project.name;
+			projectFactory.getProject($routeParams.id, function(project){
+				if(!project) $rootScope.navigate('projects');
 
-			$scope.redrawMenu();
+				$scope.project = project;
+				$rootScope.pageTitle = project.name;
 
-			if($scope.project.deadline) {
-				$scope.calculateTimeLeft();
+				$scope.redrawMenu();
 
-				if(project.deadlineValid) {
-					if(!project.deadlinePassed) {
-						if(project.daysLeft < 3) {
-							$rootScope.pageSubTitle = 'Deadline in '+project.hoursLeft+' hours and '+project.hoursMinutesLeft+' minutes';
+				if($scope.project.deadline) {
+					$scope.calculateTimeLeft();
+
+					if(project.deadlineValid) {
+						if(!project.deadlinePassed) {
+							if(project.daysLeft < 3) {
+								$rootScope.pageSubTitle = 'Deadline in '+project.hoursLeft+' hours and '+project.hoursMinutesLeft+' minutes';
+							}else{
+								$rootScope.pageSubTitle = 'Deadline in '+project.daysLeft+' day';
+								if(project.daysLeft > 1) $rootScope.pageSubTitle = $rootScope.pageSubTitle + 's'
+							}
 						}else{
-							$rootScope.pageSubTitle = 'Deadline in '+project.daysLeft+' day';
-							if(project.daysLeft > 1) $rootScope.pageSubTitle = $rootScope.pageSubTitle + 's'
+							$rootScope.pageSubTitle = 'Deadline has passed.';
 						}
-					}else{
-						$rootScope.pageSubTitle = 'Deadline has passed.';
 					}
 				}
-			}
 
+				$rootScope.loading = false;
+
+				$timeout(function () {
+					if($routeParams.view !== undefined) {
+						projectMenuFactory.publish('showTab', $routeParams.view);
+					}else{
+						projectMenuFactory.publish('showTab', 'files');
+					}
+				}, 10);
+
+			});
+		}else{
 			$rootScope.loading = false;
-
-			$timeout(function () {
-				if($routeParams.view !== undefined) {
-					projectMenuFactory.publish('showTab', $routeParams.view);
-				}else{
-					projectMenuFactory.publish('showTab', 'files');
-				}
-			}, 10);
-
-		});
+		}
 	};
 
 	$scope.redrawMenu = function() {
@@ -116,8 +118,10 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 			switch(tab) {
 				case 'tasks':
 					$scope.selection = 'mine';
+					$scope.loading = true;
 
 					projectFactory.getTasks($routeParams.id, function(tasks){
+						$scope.loading = false;
 						tasks.forEach(function (task) {
 							if($scope.project.participants !== undefined) {
 								$scope.project.participants.forEach(function (participant) {
@@ -136,6 +140,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					break;
 
 				case 'messages':
+					$scope.loading = true;
 					$scope.monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 					var today = new Date();
 					$scope.currentDay = today.getDate();
@@ -144,6 +149,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					$scope.messages = [];
 
 					projectFactory.getMessages($routeParams.id, function(messages){
+						$scope.loading = false;
 						messages.forEach(function(message) {
 
 							var created = new Date(message.created);
@@ -164,11 +170,13 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					break;
 
 				case 'files':
+					$scope.loading = true;
 					$scope.files = [];
 					$scope.selection = 'all';
 
 					if($routeParams.id) {
 						projectFactory.getFiles($routeParams.id, function(files){
+							$scope.loading = false;
 							files.forEach(function(file) {
 								file = $scope.parseFile(file);
 
@@ -439,6 +447,8 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 			head: {
 				cancel: 'Cancel',
 				action: 'Add item',
+				left: 'How do I get a file\'s URL?',
+				leftPath: '/#/help/files#new',
 				callbackData: true,
 				callback: function(data) {
 					projectFactory.postNewItem($scope.project.id, data.name, data.url, data.description, function(error, file) {

@@ -42,7 +42,7 @@
 		<a href="" ng-click="addTask()" class="button small float-right">New task</a>
 	</div>
 
-	<div ng-if="tasks.length < 1" class="padding center"><br><h2 class="gray">No tasks in this project yet.</h2></div>
+	<div ng-if="tasks.length < 1 && !loading" class="padding center"><br><h2 class="gray">No tasks in this project yet.</h2></div>
 
 	<div class="item task" ng-repeat="task in tasks | taskSelection: selection | filter: searchText">
 		<div class="icon-holder">
@@ -72,7 +72,7 @@
 		<a href="" ng-click="addMessage()" class="button small float-right">New message</a>
 	</div>
 
-	<div ng-if="messages.length < 1" class="padding center"><br><h2 class="gray">No messages in this project yet.</h2></div>
+	<div ng-if="messages.length < 1 && !loading" class="padding center"><br><h2 class="gray">No messages in this project yet.</h2></div>
 
 	<div class="item message" ng-repeat="message in messages | filter: searchText">
 		<div class="icon-holder">
@@ -108,7 +108,7 @@
 		<a href="" ng-click="addItem()" class="button small float-right">Add file</a>
 	</div>
 
-	<div ng-if="files.length < 1" class="padding center"><br><h2 class="gray">No files in this project yet.</h2></div>
+	<div ng-if="files.length < 1 && !loading" class="padding center"><br><h2 class="gray">No files in this project yet.</h2></div>
 
 	<div class="item" ng-repeat="file in files | fileSelection: selection | filter: searchText">
 		<div class="icon-holder">

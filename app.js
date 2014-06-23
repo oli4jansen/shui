@@ -49,11 +49,11 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 
 }).run( function($rootScope, $location) {
 
-	console.log('RUN');
-
 	$rootScope.protectedPages = ['/notifications', '/projects', '/projects/new', '/projects/:id/:name?/:view?', '/settings', '/tutorial'];
 
 	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
+
+		window.scroll(0,0);
 
 		$rootScope.$emit('projectMenuClear');
 

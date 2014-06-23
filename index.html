@@ -29,7 +29,7 @@
 	<meta name="msapplication-TileColor" content="#134ba8">
 	<meta name="msapplication-TileImage" content="/img/icons/mstile-144x144.png">
 	<meta name="msapplication-config" content="/img/icons/browserconfig.xml">
-	<title>Unify - Project Manager</title>
+	<title>Unify</title>
 </head>
 <body ng-class="{popupActive: popup}">
 
@@ -67,10 +67,16 @@
 		<div class="view-holder" ng-view ng-init="init()" autoscroll="true"></div>
 
 		<div class="footer">
-			<img src="img/logo-small.png"><br><br>
-			&copy; 2014 Unify
+			<div class="footer-inner">
+				<img src="img/logo-small.png">
+				<span>
+					<a href="/#/" target="_blank">Home</a>&nbsp;&nbsp;
+					<a href="/#/about" target="_blank">About</a>&nbsp;&nbsp;
+					<a href="/#/help" target="_blank">Guides and documentation</a>
+					<br>&copy; 2014 Unify
+				</span>
+			</div>
 		</div>
-
 	</div>
 
 	<popup ng-if="popup" data="popup"></popup>

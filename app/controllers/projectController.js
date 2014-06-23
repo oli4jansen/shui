@@ -20,6 +20,10 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 				if(!project) $rootScope.navigate('projects');
 
 				$scope.project = project;
+				$scope.project.participants.forEach(function (participant) {
+					var joined = new Date(participant.joined);
+					participant.joined = joined.getFullYear()+'-'+(joined.getMonth()+1)+'-'+joined.getDate();
+				});
 				$rootScope.pageTitle = project.name;
 
 				$scope.redrawMenu();
@@ -119,6 +123,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 				case 'tasks':
 					$scope.selection = 'mine';
 					$scope.loading = true;
+					$rootScope.pageSubTitle = 'Tasks';
 
 					projectFactory.getTasks($routeParams.id, function(tasks){
 						$scope.loading = false;
@@ -141,6 +146,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 				case 'messages':
 					$scope.loading = true;
+					$rootScope.pageSubTitle = 'Messages';
 					$scope.monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 					var today = new Date();
 					$scope.currentDay = today.getDate();
@@ -171,6 +177,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 				case 'files':
 					$scope.loading = true;
+					$rootScope.pageSubTitle = 'Files';
 					$scope.files = [];
 					$scope.selection = 'all';
 
@@ -195,6 +202,9 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 							});
 						});
 					}
+					break;
+				case 'participants':
+					$rootScope.pageSubTitle = 'Participants';
 					break;
 			}
 
@@ -355,7 +365,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 							'<div class="body">'+
 						  		'<input type="text" class="small" placeholder="Name of the task" name="name">'+
 								'<select name="assignTo" class="small borderless">'+
-									'<option>Assign this task to</option>';
+									'<option>Choose participant to assign to:</option>';
 
 		$scope.project.participants.forEach(function(person){
 			content = content + '<option value="'+person.email+'">'+person.name+' - '+person.email+'</option>';

@@ -4,7 +4,7 @@ app.controller("menuController", function($scope, $rootScope, $timeout, userFact
 		$timeout(function () {
 			if($rootScope.signedIn) notificationFactory.updateNotificationCount();
 			$scope.init();
-		}, 5*60*1000);
+		}, 60*1000);
 	};
 
 	$scope.showProjectMenu = false;

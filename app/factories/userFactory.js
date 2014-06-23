@@ -14,9 +14,11 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 	factory.userData = {};
 
 	factory.checkAuth = function(redirect) {
-		var token = localStorageService.get('token');
 
+		var token = localStorageService.get('token');
 		if(token !== undefined && token !== '' && token !== null) {
+			$rootScope.loading = true;
+			$rootScope.pageTitle = 'Checking authentication.';
 
 			// De client authenticatie instellen (clientId en clientSecret)
 			var encoded = Base64.encode(factory.APIClient.clientId + ':' + factory.APIClient.clientSecret);
@@ -100,8 +102,17 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 
 		console.log(data);
 
+		$rootScope.loading = false;
+
 		factory.userData = data;
 		$rootScope.notificationCount = data.unreadNotifications;
+
+		if(data.unreadNotifications > 0) {
+			document.title = '('+data.unreadNotifications+') Unify';
+		}else{
+			document.title = 'Unify';
+		}
+
 		if(factory.userData.verified) {
 
 			$rootScope.signedIn = true;

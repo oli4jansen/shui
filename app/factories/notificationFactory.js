@@ -39,6 +39,12 @@ app.factory('notificationFactory', function($http, $rootScope, userFactory) {
 			console.log(data);
 
 			callback(data.count);
+
+			if(data.count > 0) {
+				document.title = '('+data.count+') Unify';
+			}else{
+				document.title = 'Unify';
+			}
 		}).error(function(data, status, headers, config){
 			console.log(data);
 			callback(0);

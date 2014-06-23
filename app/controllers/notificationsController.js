@@ -19,8 +19,10 @@ app.controller("notificationsController", function($scope, $rootScope, userFacto
 						notification.tab = 'files';
 						break;
 					case 'document':
+					case 'file':
 						notification.icon = 'ion-ios7-copy-outline';
-						notification.description = notification.sender_name + ' added a document.';
+						notification.description = notification.sender_name + ' added a file.';
+						notification.color = 'blue';
 						notification.tab = 'files';
 						break;
 					case 'message':
@@ -48,7 +50,7 @@ app.controller("notificationsController", function($scope, $rootScope, userFacto
 						notification.icon = 'ion-ios7-briefcase-outline';
 						notification.description = notification.sender_name + ' assigned you a task.';
 						notification.tab = 'tasks';
-						notification.color = 'green';
+						notification.color = 'pink';
 						break;
 					default:
 						notification.icon = 'ion-ios7-lightbulb-outline';
@@ -60,6 +62,12 @@ app.controller("notificationsController", function($scope, $rootScope, userFacto
 				if(notification.unread) {
 					$scope.readNotifications = true;
 					$rootScope.notificationCount--;
+					
+					if($rootScope.notificationCount > 0) {
+						document.title = '('+$rootScope.notificationCount+') Unify';
+					}else{
+						document.title = 'Unify';
+					}
 				}
 
 				$scope.notifications.push(notification);

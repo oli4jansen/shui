@@ -24,4 +24,8 @@ app.controller("helpController", function($scope, $rootScope, $routeParams, $loc
 		}
 	};
 
+	$scope.$on("$destroy", function() {
+		$rootScope.pageSubTitle = false;
+	});
+
 });

@@ -51,7 +51,6 @@ app.factory('projectFactory', function($http, $rootScope, userFactory, fileFacto
 			url: factory.API+'/projects/'+id
 		}).success(function(data, status, headers, config){
 			callback(data);
-			console.log(data);
 		}).error(function(data, status, headers, config){
 			callback(false);
 		});

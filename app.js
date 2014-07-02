@@ -1,4 +1,4 @@
-var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule', 'ngTagsInput']).config(function($routeProvider) {
+var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule', 'ngTagsInput', 'unifyFilters']).config(function($routeProvider) {
 
 	$routeProvider.when('/', {
 		templateUrl: 'app/views/home.html',
@@ -70,7 +70,10 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 		$location.path('/'+path);
 	};
 
-}).filter('fileSelection', function() {
+});
+
+
+angular.module('unifyFilters', []).filter('fileSelection', function() {
   return function(input, selection) {
     if(selection == 'all') {
     	return input;

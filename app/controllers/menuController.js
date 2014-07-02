@@ -20,12 +20,12 @@ app.controller("menuController", function($scope, $rootScope, $timeout, userFact
 		$scope.projectMenu = {};
     });
 
-    projectMenuFactory.subscribe('showTab', function(event, tab) {
+    projectMenuFactory.subscribe('unifyShowTab', function(event, tab) {
         $scope.currentTab = tab;
     });
 
     $scope.projectMenuShowTab = function(tab) {
-    	projectMenuFactory.publish('showTab', tab);
+    	projectMenuFactory.publish('unifyShowTab', tab);
     };
 
     $scope.$on("$destroy", function() {

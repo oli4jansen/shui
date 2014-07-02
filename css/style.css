@@ -129,9 +129,9 @@ i.blue, h2.blue, h4.blue     { background-color: transparent; color: #4285f4; }
 i.orange, h2.orange { background-color: transparent; color: #FF7510; }
 
 .hollow.gray    { color: #8D8D8D; border: 2px solid #8D8D8D; background-color: transparent; }
-.hollow.orange    { color: #FF7510; border: 2px solid #FF7510; background-color: transparent; }
-.hollow.red    { color: #FF3819; border: 2px solid #FF3819; background-color: transparent; }
-.hollow.green    { color: #0DBE19; border: 2px solid #0DBE19; background-color: transparent; }
+.hollow.orange    { color: #FF7510; border: 2px solid rgba(255, 117, 16, 0.3); background-color: transparent; }
+.hollow.red    { color: #FF3819; border: 2px solid rgba(255, 56, 25, 0.3); background-color: transparent; }
+.hollow.green    { color: #0DBE19; border: 2px solid rgba(13, 190, 25, 0.3); background-color: transparent; }
 
 /*
   Header
@@ -175,7 +175,7 @@ nav {
   width: 100px;
   height: 100%;
   top: 0;
-  background-color: #e8e8e8;
+  background-color: #4285f4;
   z-index: 999999999999999;
 }
 nav.left { left: 0; }
@@ -197,12 +197,13 @@ nav.right { right: 0; }
       text-align: center;
       cursor: pointer;
       position: relative;
+      color: white;
 
       -webkit-transition: .15s;
       transition: .15s;
     }
     nav ul li.disabled {
-      color: #bbb !important;
+      opacity: .65;
     }
       nav ul li span {
         display: none;
@@ -222,8 +223,19 @@ nav.right { right: 0; }
         transition: .15s;
       }
       nav ul li:hover span { display: block; }
-      nav ul li:hover,
-      nav ul li.active { color: #4285f4; }
+      nav ul li.active:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 120px;
+        height: 120px;
+        margin-left: -60px;
+        margin-top: -60px;
+        background-color: rgba(255,255,255,0.125);
+        border-radius: 60px;
+      }
       nav ul li span:after {
         top: 50%;
         border: 10px solid transparent;
@@ -576,10 +588,10 @@ popup:before {
 .popup {
   display: inline-block;
   vertical-align: middle;
-  margin-left: 20%;
-  width: 60%;
+  margin-left: -350px;
+  width: 700px;
   position: relative;
-  left: 0;
+  left: 50%;
   top: 100%;
   box-shadow: 0 10px 100px rgba(0,0,0,0.3);
   overflow: none;
@@ -799,6 +811,39 @@ popup:before {
 .tutorial-button-holder .button.borderless { left: 125px; z-index: 1; }
 
 /*
+  Graphs
+*/
+
+.line-graph {
+  height: 300px;
+}
+
+.line-graph-item {
+   display: inline-block;
+   width: 8%;
+   margin: 0 3.1%;
+   background: red;
+   vertical-align: bottom;
+   text-align: center;
+   padding-top: 15px;
+   color: white;
+   position: relative;
+}
+
+.line-graph-item:before {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 9px;
+  border: 2px solid black;
+  background-color: white;
+  left: 50%;
+  top: -9px;
+  margin-left: -9px;
+  content: '';
+}
+
+/*
   ..
 */
 
@@ -844,7 +889,7 @@ h2.padding, h4.padding { padding: 15px; }
 }
 .bullet.large { height: 80px; width: 80px; line-height: 80px; }
 
-.bullet.gray { background-color: #ccc; color: rgba(0,0,0,0.65); }
+.bullet.gray { background-color: rgba(50,50,50,0.65); color: white; }
 
 .percentage-bar { width: 100%; background-color: rgba(0,0,0,0.05); border-radius: 1000px; height: 35px; line-height: 35px; position: relative; }
 .percentage-bar > * {
@@ -907,3 +952,61 @@ a.delete-button { color: #333; text-decoration: none; }
     from { opacity: .1; transform: rotateX(90deg); }
     to { opacity: 1; transform: rotateX(0deg); }
 }
+
+/*
+  Dangle
+
+
+.axis path { 
+    fill: none; 
+    stroke: #4285f4; 
+    stroke-width: 2.5px; 
+    shape-rendering: crispEdges;
+}
+
+.axis line {
+    fill: none;
+    stroke: none;
+}
+
+.axis text {
+    fill: #333;
+    stroke: none;
+    shape-rendering: crispEdges;
+    font-size: 16px;
+}
+
+.area.fill { 
+    fill: #4285f4;
+    fill-opacity: .15;
+}
+
+.area.line {
+    fill: none;
+    stroke: #4285f4;
+    stroke-width: 6.0px;
+}
+
+.area.line.points {
+    fill: #4285f4;
+    stroke: #fff;
+    stroke-width: 3.0px;
+}
+
+.histo.rect { fill: #058dc7; }
+
+.bar.rect {
+    fill: #058dc7;
+    stroke: none;
+}
+
+.bar.text {
+    fill: #000;
+    stroke: none;
+    font-size: 12px;
+}
+
+.area-chart svg {
+  height: 200px;
+}
+*/

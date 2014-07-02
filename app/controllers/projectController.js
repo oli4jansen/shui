@@ -18,12 +18,10 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 			projectFactory.getProject($routeParams.id, function(project){
 				if(!project) $rootScope.navigate('projects');
+				console.log('Project [RAW]:');
+				console.log(project);
 
 				$scope.project = project;
-				$scope.project.participants.forEach(function (participant) {
-					var joined = new Date(participant.joined);
-					participant.joined = joined.getFullYear()+'-'+(joined.getMonth()+1)+'-'+joined.getDate();
-				});
 				$rootScope.pageTitle = project.name;
 
 				$scope.redrawMenu();
@@ -49,9 +47,9 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 				$timeout(function () {
 					if($routeParams.view !== undefined) {
-						projectMenuFactory.publish('showTab', $routeParams.view);
+						projectMenuFactory.publish('unifyShowTab', $routeParams.view);
 					}else{
-						projectMenuFactory.publish('showTab', 'files');
+						projectMenuFactory.publish('unifyShowTab', 'messages');
 					}
 				}, 10);
 
@@ -112,14 +110,63 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 	};
 
 	$scope.showTab = function(tab) {
-		projectMenuFactory.publish('showTab', tab);
+		projectMenuFactory.publish('unifyShowTab', tab);
 	};
 
-	projectMenuFactory.subscribe('showTab', function(event, tab) {
+	projectMenuFactory.subscribe('unifyShowTab', function(event, tab) {
 		if($scope.tabs[tab]) {
 			$scope.currentTab = $scope.tabs[tab];
 
 			switch(tab) {
+/*				case 'analysis':
+					$rootScope.pageSubTitle = 'Analysis';
+
+			        var projectCreated = new Date($scope.project.created);
+
+			        var counter = 0;
+
+					// Participants array sorteren op joined datum
+			        $scope.project.participants.sort(function (a, b) {
+						var dateA = new Date(a.joined), dateB = new Date(b.joined);
+						return dateA-dateB;
+					});
+
+			        // DataSources object opstellen
+			        $scope.dataParticipants = {
+			        	_type: "date_histogram",
+				       	entries : [{
+				       		time: projectCreated.getTime(),
+				       		count: counter
+				       	}]
+			        };
+
+			        // Participants toevoegen aan data object
+					$scope.project.participants.forEach(function (participant) {
+						var joined = new Date(participant.joined);
+						counter++;
+
+						$scope.dataParticipants.entries.push({
+							time: joined.getTime(),
+				       		count: counter
+						});
+					});
+
+			        $scope.dataTasksFinished = {
+			        	_type: "date_histogram",
+				       	entries : [{
+				       		time: projectCreated.getTime(),
+				       		count: 0
+				       	}, {
+				       		time: projectCreated.getTime()+1000000000,
+				       		count: 10
+				       	}, {
+				       		time: projectCreated.getTime()+3000000000,
+				       		count: 6
+				       	}]
+			        };
+
+					break;*/
+
 				case 'tasks':
 					$scope.selection = 'mine';
 					$scope.loading = true;
@@ -205,6 +252,30 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					break;
 				case 'participants':
 					$rootScope.pageSubTitle = 'Participants';
+					$scope.predicate = '-joined';
+					$scope.reverse = 'false';
+
+					projectFactory.getTasks($routeParams.id, function(tasks){
+						console.log('TASKS:');
+						console.log(tasks);
+
+						if($scope.project.participants !== undefined) {
+							for(var i = 0;i < $scope.project.participants.length;i++) {
+								var date = new Date($scope.project.participants[i].joined);
+								$scope.project.participants[i].joinedDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + ' ' + date.getHours()+':'+date.getMinutes();
+								$scope.project.participants[i].hours = 0;
+
+								tasks.forEach(function (task) {
+									if(task.assignedTo == $scope.project.participants[i].email && task.finished) $scope.project.participants[i].hours = $scope.project.participants[i].hours + parseInt(task.hours);
+								});
+
+							}
+						}
+						$scope.loading = false;
+
+
+					});
+
 					break;
 			}
 

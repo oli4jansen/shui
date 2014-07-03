@@ -177,6 +177,8 @@ nav {
   top: 0;
   background-color: #4285f4;
   z-index: 999999999999999;
+  overflow: hidden;
+  overflow-y: auto;
 }
 nav.left { left: 0; }
 nav.right { right: 0; }
@@ -202,9 +204,8 @@ nav.right { right: 0; }
       -webkit-transition: .15s;
       transition: .15s;
     }
-    nav ul li.disabled {
-      opacity: .65;
-    }
+    nav ul li.disabled { cursor: default; }
+    nav ul li.disabled:before { opacity: .25; }
       nav ul li span {
         display: none;
         position: absolute;

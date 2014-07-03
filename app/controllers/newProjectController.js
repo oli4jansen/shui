@@ -14,6 +14,7 @@ app.controller("newProjectController", function($scope, $location, $rootScope, p
 		projectFactory.createProject($scope.project.name, $scope.project.participants, function (err, data) {
 			if(!err) {
 				$rootScope.navigate('projects/'+data.id+'/'+data.name);
+				$rootScope.$emit('projectsListRefresh', {});
 			}else{
 				alert(err);
 			}

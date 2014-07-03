@@ -1,7 +1,7 @@
 app.controller("verificationController", function($scope, $rootScope, $routeParams, userFactory){
 
 	// Titel van deze pagina
-	$rootScope.pageTitle = 'Thank you for signing up.';
+	$rootScope.pageTitle = 'Thank you for signing up';
 	$rootScope.menuState = 'signin';
 
 	$scope.loading = false;

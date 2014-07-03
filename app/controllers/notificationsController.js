@@ -1,7 +1,7 @@
 app.controller("notificationsController", function($scope, $rootScope, userFactory, notificationFactory){
 
 	// Titel van deze pagina
-	$rootScope.pageTitle = 'Notifications.';
+	$rootScope.pageTitle = 'Notifications';
 	$rootScope.menuState = 'notifications';
 
 	$scope.notifications = [];

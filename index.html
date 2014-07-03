@@ -33,32 +33,49 @@
 </head>
 <body ng-class="{popupActive: popup}">
 
-	<div class="page-holder">
+	<div class="page-holder" ng-class="{withProjectMenu: showProjectMenu, signedIn: signedIn}">
 		<header ng-if="pageTitle">
 			<span class="back-button ion-ios7-arrow-left" ng-if="backButton" ng-click="navigate(backButton)"></span>
 			<h1>{{pageTitle}}</h1>
 			<p ng-if="pageSubTitle" class="pageSubTitle">{{pageSubTitle}}</p>
 		</header>
 
-		<div ng-controller="menuController" ng-init="init()">
+		<div ng-controller="menuController" ng-init="init()" ng-if="signedIn" class="nav-holder">
 			<nav class="left">
-				<ul ng-if="signedIn && menuState">
-					<li ng-click="navigate('notifications')" class="ion-ios7-bell-outline" ng-class="{active: menuState == 'notifications'}"><span>Notifications</span><div class="bullet" ng-if="notificationCount > 0">{{notificationCount}}</div></li>
-					<li ng-click="navigate('projects')" class="ion-ios7-folder-outline" ng-class="{active: menuState == 'projects'}"><span>Projects</span></li>
-					<li ng-click="navigate('settings')" class="ion-ios7-gear-outline" ng-class="{active: menuState == 'settings'}"><span>Settings</span></li>
-					<li ng-click="navigate('signin/signout')" class="ion-ios7-locked-outline"><span>Sign out</span></li>
-				</ul>
+				<div ng-controller="projectsController" ng-init="init()">
+					<input type="search" placeholder="Filter projects.." ng-model="searchText">
 
-				<ul ng-if="!signedIn">
-					<li class="ion-ios7-bell-outline disabled"><span>Notifications</span></li>
-					<li class="ion-ios7-folder-outline disabled"><span>Projects</span></li>
-					<li class="ion-ios7-gear-outline disabled"><span>Settings</span></li>
-					<li ng-click="navigate('signin')" class="ion-ios7-unlocked-outline" ng-class="{active: menuState == 'signin'}"><span>Sign in/up</span></li>
+					<a ng-click="navigate('projects/new')" class="project add">
+						<i class="ion-ios7-plus-outline"></i> Create project
+					</a>
+
+					<div ng-if="projects.length > 0 && !loading">
+
+						<a ng-click="navigate('projects/'+project.id+'/'+project.name)" class="project" ng-repeat="project in projects | filter:searchText | orderBy:predicate:reverse" ng-class="{ active: project.id == currentProject }">
+							<span class="bullet" ng-class="{ gray: !project.myTasks }">{{project.myTasks}}</span> {{project.name}}
+						</a>
+
+					</div>
+
+					<div ng-if="projects.length == 0 && !loading" class="center padding">
+						<p>That's okay, you can start a new project in just a few clicks.</p><br><br><br><br>
+						<a href="" ng-click="navigate('projects/new')" class="button">Start new project</a>
+					</div>
+
+					<div class="center padding" ng-if="loading">
+						<div class="padding spinner"><i class="ion-loading-d"></i></div>
+					</div>
+				</div>
+
+				<ul ng-if="menuState">
+					<li ng-click="navigate('notifications')" class="ion-ios7-bell-outline" ng-class="{active: menuState == 'notifications'}"><div class="bullet" ng-if="notificationCount > 0">{{notificationCount}}</div></li>
+					<li ng-click="navigate('settings')" class="ion-ios7-gear-outline" ng-class="{active: menuState == 'settings'}"></li>
+					<li ng-click="navigate('signin/signout')" class="ion-ios7-locked-outline"></li>
 				</ul>
 			</nav>
 
-			<nav class="right">
-				<ul ng-if="showProjectMenu">
+			<nav class="project" ng-class="{ show: showProjectMenu }">
+				<ul>
 					<li ng-repeat="item in projectMenu.items" class="{{item.icon}}" ng-class="{ active: currentTab == item.name }" ng-click="projectMenuShowTab(item.name)"><span>{{item.name}}</span><div class="bullet {{item.color}}" ng-if="item.count">{{item.count}}</div></li>
 				</ul>
 			</nav>

@@ -7,16 +7,16 @@ app.controller("menuController", function($scope, $rootScope, $timeout, userFact
 		}, 60*1000);
 	};
 
-	$scope.showProjectMenu = false;
+	$rootScope.showProjectMenu = false;
 
 	projectMenuFactory.subscribe('projectMenuPopulate', function(event, items) {
-		$scope.showProjectMenu = true;
+		$rootScope.showProjectMenu = true;
 		$scope.projectMenu = { items: [] };
         $scope.projectMenu.items = items;
     });
 
 	projectMenuFactory.subscribe('projectMenuClear', function(event, data) {
-		$scope.showProjectMenu = false;
+		$rootScope.showProjectMenu = false;
 		$scope.projectMenu = {};
     });
 

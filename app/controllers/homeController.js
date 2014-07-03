@@ -5,12 +5,11 @@ app.controller("homeController", function($scope, $rootScope, localStorageServic
 	$rootScope.menuState = 'home';
 
 	$scope.currentWord = 'collaboration';
-//	$scope.words = ['project', 'research', 'collaborations', 'school assignments', 'graduation project'];
 	$scope.words = ['collaboration', 'efficiency', 'communication', 'linking', 'maintaining overview'];
 	$scope.animate = false;
 
 	$scope.init = function() {
-		if($rootScope.signedIn) $rootScope.navigate('/projects');
+		if($rootScope.signedIn) $rootScope.navigate('notifications');
 
 		$scope.switchWord();
 	};
@@ -31,5 +30,9 @@ app.controller("homeController", function($scope, $rootScope, localStorageServic
 			$scope.switchWord();
 		}, 2000);
 	};
+
+	$scope.$on("$destroy", function() {
+		$timeout.cancel();
+	});
 
 });

@@ -1,7 +1,7 @@
 app.controller("signInController", function($scope, $rootScope, $routeParams, userFactory){
 
 	// Titel van deze pagina
-	$rootScope.pageTitle = 'Please sign in.';
+	$rootScope.pageTitle = 'Please sign in';
 	$rootScope.menuState = 'signin';
 
 	$scope.formData = {};

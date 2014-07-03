@@ -1,9 +1,10 @@
 app.controller("projectController", function($scope, $rootScope, $timeout, $routeParams, $sce, userFactory, projectFactory, fileFactory, projectMenuFactory, localStorageService){
 
 	// Titel van deze pagina
-	$rootScope.pageTitle = 'Loading project..';
+	$rootScope.pageTitle = false;
 
 	$rootScope.menuState = 'projects';
+	$rootScope.currentProject = $routeParams.id;
 
 	$scope.project = {};
 	$scope.userData = userFactory.userData;
@@ -12,7 +13,6 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 	$scope.init = function() {
 
 		$rootScope.loading = true;
-		$rootScope.pageTitle = $routeParams.name;
 
 		if($rootScope.signedIn) {
 
@@ -22,7 +22,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 				console.log(project);
 
 				$scope.project = project;
-				$rootScope.pageTitle = project.name;
+				$rootScope.pageTitle = false;
 
 				$scope.redrawMenu();
 
@@ -118,59 +118,9 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 			$scope.currentTab = $scope.tabs[tab];
 
 			switch(tab) {
-/*				case 'analysis':
-					$rootScope.pageSubTitle = 'Analysis';
-
-			        var projectCreated = new Date($scope.project.created);
-
-			        var counter = 0;
-
-					// Participants array sorteren op joined datum
-			        $scope.project.participants.sort(function (a, b) {
-						var dateA = new Date(a.joined), dateB = new Date(b.joined);
-						return dateA-dateB;
-					});
-
-			        // DataSources object opstellen
-			        $scope.dataParticipants = {
-			        	_type: "date_histogram",
-				       	entries : [{
-				       		time: projectCreated.getTime(),
-				       		count: counter
-				       	}]
-			        };
-
-			        // Participants toevoegen aan data object
-					$scope.project.participants.forEach(function (participant) {
-						var joined = new Date(participant.joined);
-						counter++;
-
-						$scope.dataParticipants.entries.push({
-							time: joined.getTime(),
-				       		count: counter
-						});
-					});
-
-			        $scope.dataTasksFinished = {
-			        	_type: "date_histogram",
-				       	entries : [{
-				       		time: projectCreated.getTime(),
-				       		count: 0
-				       	}, {
-				       		time: projectCreated.getTime()+1000000000,
-				       		count: 10
-				       	}, {
-				       		time: projectCreated.getTime()+3000000000,
-				       		count: 6
-				       	}]
-			        };
-
-					break;*/
-
 				case 'tasks':
-					$scope.selection = 'mine';
+					$scope.selection = 'all';
 					$scope.loading = true;
-					$rootScope.pageSubTitle = 'Tasks';
 
 					projectFactory.getTasks($routeParams.id, function(tasks){
 						$scope.loading = false;
@@ -193,7 +143,6 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 				case 'messages':
 					$scope.loading = true;
-					$rootScope.pageSubTitle = 'Messages';
 					$scope.monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
 					var today = new Date();
 					$scope.currentDay = today.getDate();
@@ -224,7 +173,6 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 				case 'files':
 					$scope.loading = true;
-					$rootScope.pageSubTitle = 'Files';
 					$scope.files = [];
 					$scope.selection = 'all';
 
@@ -251,7 +199,6 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 					}
 					break;
 				case 'participants':
-					$rootScope.pageSubTitle = 'Participants';
 					$scope.predicate = '-joined';
 					$scope.reverse = 'false';
 
@@ -337,6 +284,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 						if(!error){
 							if(participant.email == $scope.userData.email) {
 								$rootScope.navigate('projects');
+								$rootScope.$emit('projectsListRefresh', {});
 							}else{
 								var index = $scope.project.participants.indexOf(participant);
 								$scope.project.participants.splice(index, 1);								
@@ -571,8 +519,8 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 	};
 
 	$scope.$on("$destroy", function() {
-		$rootScope.pageSubTitle = false;
 		$rootScope.backButton = false;
+		$rootScope.currentProject = false;
 		$timeout.cancel();
 		projectMenuFactory.publish('projectMenuClear', {});
 	});

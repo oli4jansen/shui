@@ -54,10 +54,20 @@ app.controller("projectsController", function($scope, $rootScope, $sce, $timeout
 				callback: function(data) {
 					console.log(data);
 
+					projectFactory.changeName(project.id, data.name, function(err, data) {
+						$rootScope.popup = false;
+						if(err) {
+							console.log(err);
+							alert('Sorry, we couldn\'t update the project.');
+						}else{
+							$rootScope.$emit('projectsListRefresh', {});
+						}
+					});
+
 				}
 			},
 			content: $sce.trustAsHtml('<div class="padding">'+
-				'<input type="text" value="'+project.name+'">'+
+				'<input type="text" name="name" value="'+project.name+'">'+
 				'</div>')
 		};
 	};

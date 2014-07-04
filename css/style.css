@@ -320,18 +320,26 @@ nav.project.show {
 
   nav.left .project:hover,
   nav.left .project.active { background-color: rgba(255,255,255,0.15); text-decoration: none; }
-    nav.left .project .bullet { margin: 15px 10px 15px 15px; }
-    nav.left .project i {
-      display: none;
-      width: 30px;
+    nav.left .project .bullet {
       margin: 15px 10px 15px 15px;
+      -webkit-transition: .1s ease-out .2s;
+      transition: .1s ease-out .2s;
+    }
+    nav.left .project i {
+      display: inline-block;
+      width: 30px;
+      opacity: 0;
+      margin: 15px -45px 15px 15px;
       text-align: center;
       font-size: 28px;
       vertical-align: top;
+
+      -webkit-transition: .1s ease-out .2s;
+      transition: .1s ease-out .2s;
     }
-    nav.left .project.add i { display: inline-block; }
-    nav.left .project:hover .bullet { display: none; }
-    nav.left .project:hover i { display: inline-block; }
+    nav.left .project:hover .bullet { opacity: 0; margin-left: -40px; }
+    nav.left .project:hover i { opacity: 1; margin-right: 10px; }
+    nav.left .project.add i { display: inline-block; opacity: 1; margin-right: 10px; }
     nav.left .project .title { padding: 15px 0; display: inline-block; width: 100%; }
 
 

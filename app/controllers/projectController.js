@@ -208,8 +208,8 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 						if($scope.project.participants !== undefined) {
 							for(var i = 0;i < $scope.project.participants.length;i++) {
-								var date = new Date($scope.project.participants[i].joined);
-								$scope.project.participants[i].joinedDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + ' ' + date.getHours()+':'+date.getMinutes();
+/*								var date = new Date($scope.project.participants[i].joined);
+								$scope.project.participants[i].joinedDate = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate() + ' ' + date.getHours()+':'+date.getMinutes();*/
 								$scope.project.participants[i].hours = 0;
 
 								tasks.forEach(function (task) {

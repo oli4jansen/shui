@@ -45,10 +45,6 @@
 				<div ng-controller="projectsController" ng-init="init()">
 					<input type="search" placeholder="Filter projects.." ng-model="searchText">
 
-					<a ng-click="navigate('projects/new')" class="project add">
-						<i class="ion-plus-circled"></i> <span class="title">Create project</span>
-					</a>
-
 					<div ng-if="projects.length > 0 && !loading">
 
 						<a class="project" ng-repeat="project in projects | filter:searchText | orderBy:predicate:reverse" ng-class="{ active: project.id == currentProject }">
@@ -56,6 +52,10 @@
 						</a>
 
 					</div>
+
+					<a ng-click="navigate('projects/new')" class="project add">
+						<i class="ion-plus-circled"></i> <span class="title">Create project</span>
+					</a>
 
 					<div ng-if="projects.length == 0 && !loading" class="center padding">
 						<p>That's okay, you can start a new project in just a few clicks.</p><br><br><br><br>

@@ -121,7 +121,7 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 			}else if(redirect) {
 				$location.path(redirect).search('redirect', null);
 			}else{
-				$location.path('/notifications');
+				$location.path('/settings');
 			}
 		}else{
 			console.log('Not verified');

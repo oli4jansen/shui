@@ -1,4 +1,4 @@
-app.controller("projectsController", function($scope, $rootScope, $timeout, userFactory, projectFactory){
+app.controller("projectsController", function($scope, $rootScope, $sce, $timeout, userFactory, projectFactory){
 
 	// Titel van deze pagina
 	$rootScope.pageTitle = 'Your projects';
@@ -44,9 +44,26 @@ app.controller("projectsController", function($scope, $rootScope, $timeout, user
 		}
 	};
 
+	$scope.edit = function (project) {
+		$rootScope.popup = {
+			title: 'Change project name',
+			head: {
+				cancel: 'Cancel',
+				action: 'Change name',
+				callbackData: true,
+				callback: function(data) {
+					console.log(data);
+
+				}
+			},
+			content: $sce.trustAsHtml('<div class="padding">'+
+				'<input type="text" value="'+project.name+'">'+
+				'</div>')
+		};
+	};
+
 	$rootScope.$on('projectsListRefresh', function() {
 		$scope.init();
 	});
-
 
 });

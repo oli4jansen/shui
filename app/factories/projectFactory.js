@@ -246,5 +246,21 @@ app.factory('projectFactory', function($http, $rootScope, userFactory, fileFacto
 
 	};
 
+	factory.changeName = function(projectId, name, callback) {
+
+		$http({
+			method: 'PUT',
+			url: factory.API+'/projects/'+projectId,
+			data: {
+				name: name
+			}
+		}).success(function(data, status, headers, config){
+			callback(false, data);
+		}).error(function(data, status, headers, config){
+			callback(data.msg, false);
+		});
+
+	};
+
 	return factory;
 });

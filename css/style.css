@@ -16,8 +16,8 @@ html, body {
   min-height: 100%;
   background-color: white;
   position: relative;
-  -webkit-transition: .1s;
-  transition: .1s;
+  -webkit-transition: .2s;
+  transition: .2s;
 }
 .page-holder.signedIn { padding: 0 25px 15px 275px; }
 .page-holder.withProjectMenu { padding-left: 375px; }
@@ -28,11 +28,9 @@ html, body {
 }
 
 body.popupActive .page-holder {
-  -webkit-transform: scale(0.85);
-  transform: scale(0.85);
-  opacity: .5;
+  opacity: .4;
   pointer-events: none;
-  -webkit-filter: blur(10px);
+  -webkit-filter: blur(5px);
 }
 
 /*
@@ -221,14 +219,14 @@ nav.project.show {
       display: block;
       width: 100px;
 
-      font-size: 45px;
+      font-size: 35px;
       text-align: center;
       cursor: pointer;
       position: relative;
-      color: white;
+      color: rgba(255,255,255,0.75);
 
-      -webkit-transition: .15s;
-      transition: .15s;
+      -webkit-transition: .2s;
+      transition: .2s;
     }
     nav ul li.disabled { cursor: default; }
     nav ul li.disabled:before { opacity: .25; }
@@ -272,6 +270,10 @@ nav.project.show {
       nav ul li:hover:after {
         background-color: rgba(255,255,255,0.1);
       }
+      nav ul li:hover,
+      nav ul li.active {
+        color: white;
+      }
 
       nav ul li .bullet {
         font-size: 13px;
@@ -288,7 +290,7 @@ nav.project.show {
   nav.left .project {
     display: block;
     position: relative;
-    padding: 15px 15px;
+    padding: 0;
     text-align: left;
     color: white;
     cursor: pointer;
@@ -303,13 +305,6 @@ nav.project.show {
     content: '';
     width: 50px;
     height: 100%;
-    background-image: -webkit-gradient(
-      linear,
-      left bottom,
-      right bottom,
-      color-stop(0, #1B8FDD),
-      color-stop(1, #C7E9FF)
-    );
     background-image: -o-linear-gradient(right, rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 100%);
     background-image: -moz-linear-gradient(right, rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 100%);
     background-image: -webkit-linear-gradient(right, rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 100%);
@@ -322,17 +317,23 @@ nav.project.show {
   }
   nav.left .project.add { opacity: .5; }
   nav.left .project.add:hover { opacity: 1; background-color: rgba(13, 190, 25, 0.75); }
+
   nav.left .project:hover,
   nav.left .project.active { background-color: rgba(255,255,255,0.15); text-decoration: none; }
-    nav.left .project .bullet { margin-right: 10px; }
+    nav.left .project .bullet { margin: 15px 10px 15px 15px; }
     nav.left .project i {
+      display: none;
       width: 30px;
-      display: inline-block;
-      margin-right: 10px;
+      margin: 15px 10px 15px 15px;
       text-align: center;
-      font-size: 30px;
-      vertical-align: middle;
+      font-size: 28px;
+      vertical-align: top;
     }
+    nav.left .project.add i { display: inline-block; }
+    nav.left .project:hover .bullet { display: none; }
+    nav.left .project:hover i { display: inline-block; }
+    nav.left .project .title { padding: 15px 0; display: inline-block; width: 100%; }
+
 
   nav.left ul {
     position: fixed;
@@ -340,12 +341,18 @@ nav.project.show {
     left: 0;
     width: 250px;
     padding: 0;
+
+    background-image: -o-linear-gradient(rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 50%);
+    background-image: -moz-linear-gradient(rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 50%);
+    background-image: -webkit-linear-gradient(rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 50%);
+    background-image: -ms-linear-gradient(rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 50%);
+    background-image: linear-gradient(rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 50%);
   }
     nav.left ul li {
       width: 75px;
       display: inline-block;
 
-      font-size: 35px;
+      font-size: 30px;
     }
 
   nav input[type=search] {
@@ -355,6 +362,8 @@ nav.project.show {
     width: 72%;
     color: white !important;
   }
+
+  nav input[type=search]:focus { border-color: white !important; }
 
   nav input::-webkit-input-placeholder {
      color: rgba(255,255,255,0.75);
@@ -1009,7 +1018,7 @@ h2.padding, h4.padding { padding: 15px; }
 .percentage-bar-inner { background-color: #4285f4; }
 .percentage-bar-inner-gray { background-color: rgba(0,0,0,0.15); }
 
-.toolbar { height: 56px; padding: 35px 0; max-width: 750px; margin: 0 auto; }
+.toolbar { height: 96px; padding: 35px 0; max-width: 750px; margin: 0 auto; }
 .toolbar.large { max-width: 100%; }
 .toolbar > * { margin-top: 0 !important; margin-bottom: 0 !important; }
 

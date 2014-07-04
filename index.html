@@ -46,13 +46,13 @@
 					<input type="search" placeholder="Filter projects.." ng-model="searchText">
 
 					<a ng-click="navigate('projects/new')" class="project add">
-						<i class="ion-ios7-plus-outline"></i> Create project
+						<i class="ion-plus-circled"></i> <span class="title">Create project</span>
 					</a>
 
 					<div ng-if="projects.length > 0 && !loading">
 
-						<a ng-click="navigate('projects/'+project.id+'/'+project.name)" class="project" ng-repeat="project in projects | filter:searchText | orderBy:predicate:reverse" ng-class="{ active: project.id == currentProject }">
-							<span class="bullet" ng-class="{ gray: !project.myTasks }">{{project.myTasks}}</span> {{project.name}}
+						<a class="project" ng-repeat="project in projects | filter:searchText | orderBy:predicate:reverse" ng-class="{ active: project.id == currentProject }">
+							<span class="bullet" ng-class="{ gray: !project.myTasks }">{{project.myTasks}}</span><i class="ion-edit" ng-click="edit(project)"></i> <span ng-click="navigate('projects/'+project.id+'/'+project.name)" class="title">{{project.name}}</span>
 						</a>
 
 					</div>
@@ -68,9 +68,9 @@
 				</div>
 
 				<ul ng-if="menuState">
-					<li ng-click="navigate('notifications')" class="ion-ios7-bell-outline" ng-class="{active: menuState == 'notifications'}"><div class="bullet" ng-if="notificationCount > 0">{{notificationCount}}</div></li>
-					<li ng-click="navigate('settings')" class="ion-ios7-gear-outline" ng-class="{active: menuState == 'settings'}"></li>
-					<li ng-click="navigate('signin/signout')" class="ion-ios7-locked-outline"></li>
+					<li ng-click="navigate('notifications')" class="ion-ios7-bell" ng-class="{active: menuState == 'notifications'}"><div class="bullet" ng-if="notificationCount > 0">{{notificationCount}}</div></li>
+					<li ng-click="navigate('settings')" class="ion-gear-a" ng-class="{active: menuState == 'settings'}"></li>
+					<li ng-click="navigate('signin/signout')" class="ion-power"></li>
 				</ul>
 			</nav>
 

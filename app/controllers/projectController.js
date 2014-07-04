@@ -61,18 +61,18 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 	$scope.redrawMenu = function() {
 		var menuItems = [{
-				icon: 'ion-ios7-people-outline',
+				icon: 'ion-person-stalker',
 				name: 'participants'
 			}, {
-				icon: 'ion-ios7-chatboxes-outline',
+				icon: 'ion-chatbubbles',
 				name: 'messages'
 			}, {
-				icon: 'ion-ios7-briefcase-outline',
+				icon: 'ion-briefcase',
 				count: $scope.project.myTasks,
 				color: 'gray',
 				name: 'tasks'
 			}, {
-				icon: 'ion-ios7-copy-outline',
+				icon: 'ion-document',
 				name: 'files'
 		}];
 		projectMenuFactory.publish('projectMenuPopulate', menuItems);

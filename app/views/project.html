@@ -1,5 +1,5 @@
 <div id="mainView">
-	<div ng-include="currentTab"></div>
+	<div ng-include="currentTab" class="currentTab"></div>
 </div>
 
 <div class="center padding" ng-if="loading">
@@ -37,6 +37,7 @@
 		<select class="small float-left" ng-model="selection">
 			<option value="all">All tasks</option>
 			<option value="mine">My tasks</option>
+			<option value="mine-unfinished">My unfinished tasks</option>
 			<option value="unfinished">Unfinished</option>
 			<option value="finished">Finished</option>
 		</select>

@@ -101,6 +101,14 @@ angular.module('unifyFilters', []).filter('fileSelection', function() {
     		}
     	});
     	return filtered;
+    }else if(selection == 'mine-unfinished'){
+    	var filtered = [];
+    	input.forEach(function(item) {
+    		if(item.assignedTo.email == userFactory.userData.email && !item.finished) {
+    			filtered.push(item);
+    		}
+    	});
+    	return filtered;
     }else if(selection == 'unfinished'){
     	var filtered = [];
     	input.forEach(function(item) { if(!item.finished) filtered.push(item) });

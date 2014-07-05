@@ -11,7 +11,7 @@ html, body {
 }
 
 .page-holder {
-  padding: 0 25px 15px 25px;
+  padding: 0 25px 15px 275px;
   margin: 0;
   min-height: 100%;
   background-color: white;
@@ -19,7 +19,7 @@ html, body {
   -webkit-transition: .2s;
   transition: .2s;
 }
-.page-holder.signedIn { padding: 0 25px 15px 275px; }
+.page-holder.signedOut { padding: 0 25px 15px 25px; }
 .page-holder.withProjectMenu { padding-left: 375px; }
 
 .view-holder {
@@ -28,9 +28,9 @@ html, body {
 }
 
 body.popupActive .page-holder {
-  opacity: .4;
+  opacity: .15;
   pointer-events: none;
-  -webkit-filter: blur(5px);
+/*  -webkit-filter: blur(5px);*/
 }
 
 /*
@@ -180,7 +180,7 @@ nav {
   overflow: hidden;
   overflow-y: auto;
 
-  box-shadow: 5px 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0px 0 15px rgba(0,0,0,0.2);
 }
 nav.left {
   left: 0;
@@ -202,7 +202,7 @@ nav.project {
 }
 nav.project.show {
   left: 250px;
-  box-shadow: 5px 0 10px rgba(0,0,0,0.1);
+  box-shadow: 0px 0 15px rgba(0,0,0,0.2);
 
 }
 
@@ -311,12 +311,29 @@ nav.project.show {
     background-image: -ms-linear-gradient(right, rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 100%);
     background-image: linear-gradient(to right, rgba(66, 133, 244, 0) 0%, rgba(66, 133, 244, 1) 100%);
 
+    -webkit-transition: .15s;
+    transition: .15s;
     position: absolute;
     right: 0;
     top: 0;
   }
+  nav.left .project.active:after,
+  nav.left .project:hover:after {
+    background-image: -o-linear-gradient(right, rgba(93, 150, 244, 0) 0%, rgba(93, 150, 244, 1) 100%);
+    background-image: -moz-linear-gradient(right, rgba(93, 150, 244, 0) 0%, rgba(93, 150, 244, 1) 100%);
+    background-image: -webkit-linear-gradient(right, rgba(93, 150, 244, 0) 0%, rgba(93, 150, 244, 1) 100%);
+    background-image: -ms-linear-gradient(right, rgba(93, 150, 244, 0) 0%, rgba(93, 150, 244, 1) 100%);
+    background-image: linear-gradient(to right, rgba(93, 150, 244, 0) 0%, rgba(93, 150, 244, 1) 100%);
+  }
+  nav.left .project.add:hover:after {
+    background-image: -o-linear-gradient(right, rgba(13, 190, 25, 0) 0%, rgba(13, 190, 25, 1) 100%);
+    background-image: -moz-linear-gradient(right, rgba(13, 190, 25, 0) 0%, rgba(13, 190, 25, 1) 100%);
+    background-image: -webkit-linear-gradient(right, rgba(13, 190, 25, 0) 0%, rgba(13, 190, 25, 1) 100%);
+    background-image: -ms-linear-gradient(right, rgba(13, 190, 25, 0) 0%, rgba(13, 190, 25, 1) 100%);
+    background-image: linear-gradient(to right, rgba(13, 190, 25, 0) 0%, rgba(13, 190, 25, 1) 100%);
+  }
   nav.left .project.add { opacity: .5; }
-  nav.left .project.add:hover { opacity: 1; background-color: rgba(13, 190, 25, 0.75); }
+  nav.left .project.add:hover { opacity: 1; background-color: rgb(13, 190, 25); }
 
   nav.left .project:hover,
   nav.left .project.active { background-color: rgba(255,255,255,0.15); text-decoration: none; }
@@ -449,6 +466,7 @@ input[type=search] {
   border: 2px solid rgba(0,0,0,0.2);
   border-radius: 5px;
   color: #333;
+  background-color: transparent;
 }
 select:focus, input[type=search]:focus { color: #4285f4; border-color: #4285f4; }
 
@@ -665,6 +683,39 @@ ul.list {
 }
 
 /*
+  Tiles
+*/
+
+.tile {
+  display: inline-block;
+  width: 31.33%;
+  margin: 1%;
+  padding: 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  vertical-align: top;
+  opacity: .5;
+
+  -webkit-transition: .3s;
+  transition: .3s;
+}
+.tile:hover {
+  opacity: .8;
+}
+  .tile .icon-holder {
+    display: block;
+    text-align: center;
+    font-size: 60px;
+  }
+  .tile .important {
+    font-size: 24px;
+    line-height: 28px;
+    display: block;
+    font-weight: 300;
+    margin: 10px 0;
+  }
+
+/*
   'Grid'
 */
 
@@ -709,7 +760,7 @@ popup:before {
   position: relative;
   left: 50%;
   top: 100%;
-  box-shadow: 0 10px 100px rgba(0,0,0,0.3);
+  box-shadow: 0 10px 100px rgba(0,0,0,0.45);
   overflow: none;
 
   -webkit-transition: .25s;
@@ -1026,9 +1077,22 @@ h2.padding, h4.padding { padding: 15px; }
 .percentage-bar-inner { background-color: #4285f4; }
 .percentage-bar-inner-gray { background-color: rgba(0,0,0,0.15); }
 
-.toolbar { height: 96px; padding: 35px 0; max-width: 750px; margin: 0 auto; }
+.toolbar {
+  height: 95px;
+  padding: 30px 25px 30px 365px;
+  display: block;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background-color: rgba(255,255,255,0.9);
+  box-shadow: 0px 0 15px rgba(0,0,0,0.1);
+  z-index: 9999;
+}
 .toolbar.large { max-width: 100%; }
 .toolbar > * { margin-top: 0 !important; margin-bottom: 0 !important; }
+
+.currentTab { padding-top: 95px; }
 
 a.delete-button { color: #333; text-decoration: none; }
 

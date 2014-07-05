@@ -10,6 +10,9 @@ app.controller("notificationsController", function($scope, $rootScope, userFacto
 	$scope.init = function() {
 		notificationFactory.getNotifications(function(){
 
+			console.log('Notifications [RAW]:');
+			console.log(notificationFactory.notifications);
+
 			notificationFactory.notifications.forEach(function(notification) {
 
 				switch(notification.type) {
@@ -20,40 +23,40 @@ app.controller("notificationsController", function($scope, $rootScope, userFacto
 						break;
 					case 'document':
 					case 'file':
-						notification.icon = 'ion-ios7-copy-outline';
+						notification.icon = 'ion-document';
 						notification.description = notification.sender_name + ' added a file.';
 						notification.color = 'blue';
 						notification.tab = 'files';
 						break;
 					case 'message':
-						notification.icon = 'ion-ios7-compose-outline';
+						notification.icon = 'ion-chatbubble';
 						notification.description = notification.sender_name + ' wrote a message.';
 						notification.tab = 'messages';
 						break;
 					case 'invite':
-						notification.icon = 'ion-ios7-personadd-outline';
+						notification.icon = 'ion-person-add';
 						notification.description = notification.sender_name + ' invited you.';
 						notification.tab = 'participants';
 						notification.color = 'green';
 						break;
 					case 'uninvite':
-						notification.icon = 'ion-ios7-close-outline';
+						notification.icon = 'ion-close-circled';
 						notification.description = notification.sender_name + ' removed you.';
 						notification.color = 'red';
 						break;
 					case 'location':
-						notification.icon = 'ion-ios7-location-outline';
+						notification.icon = 'ion-location';
 						notification.description = notification.sender_name + ' added a location.';
 						notification.tab = 'files';
 						break;
 					case 'task_assigned':
-						notification.icon = 'ion-ios7-briefcase-outline';
+						notification.icon = 'ion-briefcase';
 						notification.description = notification.sender_name + ' assigned you a task.';
 						notification.tab = 'tasks';
 						notification.color = 'pink';
 						break;
 					default:
-						notification.icon = 'ion-ios7-lightbulb-outline';
+						notification.icon = 'ion-lightbulb';
 						notification.description = notification.sender_name + ' did something.';
 						notification.tab = '';
 						break;
@@ -71,7 +74,12 @@ app.controller("notificationsController", function($scope, $rootScope, userFacto
 				}
 
 				$scope.notifications.push(notification);
+
+//				$scope.notifications.push(notification);
 			});
+
+			console.log('Yo');
+			console.log($scope.notifications);
 
 			if($scope.readNotifications) notificationFactory.readNotifications();
 

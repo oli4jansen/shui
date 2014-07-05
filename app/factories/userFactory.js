@@ -17,8 +17,9 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 
 		var token = localStorageService.get('token');
 		if(token !== undefined && token !== '' && token !== null) {
+			console.log('Token:' + token);
 			$rootScope.loading = true;
-			$rootScope.pageTitle = 'Checking authentication.';
+			$rootScope.pageTitle = 'Authenticating';
 
 			// De client authenticatie instellen (clientId en clientSecret)
 			var encoded = Base64.encode(factory.APIClient.clientId + ':' + factory.APIClient.clientSecret);
@@ -35,6 +36,8 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 				factory.getMeSuccess(data, status, headers, config, redirect);
 			}).error(function(data, status, headers, config){
 				localStorageService.set('token', null);
+				$rootScope.loading = false;
+				$rootScope.navigate('signin');
 				console.log('Access token afgekeurd, maak een nieuwe aan.');
 			});
 		}
@@ -146,11 +149,36 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 	};
 
 	factory.signOut = function(email, password, redirect) {
-		localStorageService.set('token', null);
+
+		var token = localStorageService.get('token');
+
+		if(token) {
+			$http({
+				method: 'POST',
+				url: factory.API+'/logout',
+				data: {
+					token: token
+				}
+			}).success(function(data, status, headers, config){
+
+				console.log('Access token successfully deleted');
+				localStorageService.set('token', null);
+
+			}).error(function(data, status, headers, config){
+
+				console.log('Nope, signout unsuccessfull');
+				console.log(data);
+			
+			});
+		}else{
+			console.log('No token found (which is fucking weird)');
+		}
+
 		factory.userData = {};
 		$rootScope.signedIn = false;
 
-		$rootScope.navigate('');
+		$rootScope.navigate('signin');
+	
 	};
 
 	factory.update = function(name, emailNotifications, callback) {

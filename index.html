@@ -33,7 +33,7 @@
 </head>
 <body ng-class="{popupActive: popup}">
 
-	<div class="page-holder" ng-class="{withProjectMenu: showProjectMenu, signedIn: signedIn}">
+	<div class="page-holder" ng-class="{withProjectMenu: showProjectMenu, signedOut: !signedIn}">
 		<header ng-if="pageTitle">
 			<span class="back-button ion-ios7-arrow-left" ng-if="backButton" ng-click="navigate(backButton)"></span>
 			<h1>{{pageTitle}}</h1>

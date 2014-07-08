@@ -17,7 +17,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 		if($rootScope.signedIn) {
 
 			projectFactory.getProject($routeParams.id, function(project){
-				if(!project) $rootScope.navigate('projects');
+				if(!project) $rootScope.navigate('');
 				console.log('Project [RAW]:');
 				console.log(project);
 

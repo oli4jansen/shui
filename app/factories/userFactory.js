@@ -35,10 +35,18 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 			}).success(function(data, status, headers, config) {
 				factory.getMeSuccess(data, status, headers, config, redirect);
 			}).error(function(data, status, headers, config){
-				localStorageService.set('token', null);
-				$rootScope.loading = false;
-				$rootScope.navigate('signin');
-				console.log('Access token afgekeurd, maak een nieuwe aan.');
+
+				if(status == 0) {
+					$rootScope.loading = false;
+					alert('We couldn\'t connect to our server. Please come back later.');
+					$rootScope.navigate('');
+				}else{
+					localStorageService.set('token', null);
+					$rootScope.loading = false;
+					$rootScope.navigate('signin');
+					console.log('Access token afgekeurd, maak een nieuwe aan.');	
+					$rootScope.pageTitle = 'Please sign in';				
+				}
 			});
 		}
 	};
@@ -124,7 +132,7 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 			}else if(redirect) {
 				$location.path(redirect).search('redirect', null);
 			}else{
-				$location.path('/settings');
+				$location.path('/start');
 			}
 		}else{
 			console.log('Not verified');

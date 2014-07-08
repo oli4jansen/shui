@@ -24,6 +24,10 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 		templateUrl: 'app/views/help.html',
 		controller:  'helpController'
 
+	}).when('/start', {
+		templateUrl: 'app/views/start.html',
+		controller:  'startController'
+
 	}).when('/notifications', {
 		templateUrl: 'app/views/notifications.html',
 		controller:  'notificationsController'
@@ -34,9 +38,6 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 	}).when('/projects/:id/:name?/:view?', {
 		templateUrl: 'app/views/project.html',
 		controller:  'projectController'
-	}).when('/projects', {
-		templateUrl: 'app/views/projects.html',
-		controller:  'projectsController'
 
 	}).when('/settings', {
 		templateUrl: 'app/views/settings.html',
@@ -49,7 +50,7 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 
 }).run( function($rootScope, $location) {
 
-	$rootScope.protectedPages = ['/notifications', '/projects', '/projects/new', '/projects/:id/:name?/:view?', '/settings', '/tutorial'];
+	$rootScope.protectedPages = ['/notifications', '/start', '/projects/new', '/projects/:id/:name?/:view?', '/settings', '/tutorial'];
 
 	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
 

@@ -33,7 +33,6 @@ app.controller("projectsController", function($scope, $rootScope, $sce, $timeout
 
 					$scope.projects.push(project);
 				});
-				if($scope.projects.length == 0) $rootScope.pageTitle = 'You don\'t have any projects yet.';
 				$scope.loading = false;
 			});
 		}else{

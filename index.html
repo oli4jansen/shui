@@ -53,14 +53,13 @@
 
 					</div>
 
+					<div ng-if="projects.length == 0 && !loading" class="center padding">
+						<p>No projects to show.</p>
+					</div>
+
 					<a ng-click="navigate('projects/new')" class="project add">
 						<i class="ion-plus-circled"></i> <span class="title">Create project</span>
 					</a>
-
-					<div ng-if="projects.length == 0 && !loading" class="center padding">
-						<p>That's okay, you can start a new project in just a few clicks.</p><br><br><br><br>
-						<a href="" ng-click="navigate('projects/new')" class="button">Start new project</a>
-					</div>
 
 					<div class="center padding" ng-if="loading">
 						<div class="padding spinner"><i class="ion-loading-d"></i></div>

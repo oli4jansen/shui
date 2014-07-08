@@ -128,7 +128,7 @@ app.factory('userFactory', function($http, $rootScope, $location, $timeout, loca
 
 			$rootScope.signedIn = true;
 			if(factory.userData.name == '') {
-				$rootScope.navigate('tutorial');
+				$rootScope.navigate('start');
 			}else if(redirect) {
 				$location.path(redirect).search('redirect', null);
 			}else{

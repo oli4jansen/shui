@@ -71,6 +71,9 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 		$location.path('/'+path);
 	};
 
+	document.getElementById('initialSpinner').style.display = 'none';
+	document.getElementById('pageHolder').style.display = 'block';
+
 });
 
 
@@ -124,4 +127,6 @@ angular.module('unifyFilters', []).filter('fileSelection', function() {
   };
 }]);
 
-angular.bootstrap(document.getElementById("document"), ['Unify']);
+/*angular.element(document).ready(function() {
+	angular.bootstrap(document.getElementById("document"), ['Unify']);
+});*/

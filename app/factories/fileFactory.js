@@ -46,8 +46,27 @@ app.factory('fileFactory', function($sce) {
 					case 'jpeg':
 					case 'png':
 					case 'gif':
+					case 'tiff':
 						factory.fileType = 'picture';
 						factory.showableUrl = 'https://dl.dropboxusercontent.com/'+factory.parsedURL.path;
+						break;
+
+					case 'raw':
+						factory.fileType = 'picture';
+						break;
+
+					// Videos
+					case 'mpeg':
+					case 'mp4':
+					case 'avi':
+					case 'divx':
+					case 'xvid':
+					case 'flv':
+					case 'h264':
+					case 'mov':
+					case 'mkv':
+					case 'swf':
+						factory.fileType = 'video';
 						break;
 
 					default:

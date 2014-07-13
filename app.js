@@ -50,14 +50,19 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 
 }).run( function($rootScope, $location) {
 
+	// Lijst met pagina's die niet bezocht mogen worden als er niet ingelogd is
 	$rootScope.protectedPages = ['/notifications', '/start', '/projects/new', '/projects/:id/:name?/:view?', '/settings', '/tutorial'];
 
+	// Elke keer dat een andere pagina geladen wordt, voeren we dit uit:
 	$rootScope.$on( "$routeChangeStart", function(event, next, current) {
 
+		// Naar boven scrollen
 		window.scroll(0,0);
 
+		// Project-menu legen
 		$rootScope.$emit('projectMenuClear');
 
+		// Kijken of de pagina waar de gebruiker heen gaat en of die beveiligd is
 		if(next.$$route && next.$$route.originalPath && $rootScope.protectedPages.indexOf(next.$$route.originalPath) > -1 && !$rootScope.signedIn) {
 
 			var oldPath = $location.path();
@@ -67,11 +72,12 @@ var app = angular.module('Unify', ['ngRoute', 'ngAnimate', 'LocalStorageModule',
 
     });
 
-	$rootScope.navigate = function(path) {
-		$location.path('/'+path);
-	};
+	// Shortcut functie (wordt door de hele app gebruikt)
+	$rootScope.navigate = function(path) { $location.path('/'+path); };
 
+	// Hide the initial spinner
 	document.getElementById('initialSpinner').style.display = 'none';
+	// Show the page holder
 	document.getElementById('pageHolder').style.display = 'block';
 
 });

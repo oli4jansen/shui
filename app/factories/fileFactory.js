@@ -19,7 +19,13 @@ app.factory('fileFactory', function($sce) {
 
 		switch(factory.parsedURL.host) {
 			/*
-				Dropbox files
+				
+				Dropbox
+
+				- Documents
+				- Pictures
+				- Videos
+
 			*/
 			case 'www.dropbox.com':
 			case 'dropbox.com':
@@ -76,7 +82,11 @@ app.factory('fileFactory', function($sce) {
 				break;
 
 			/*
-				Google Drive files
+				
+				Google Drive
+
+				- Documents
+
 			*/
 			case 'docs.google.com':
 			case 'drive.google.com':
@@ -103,6 +113,9 @@ app.factory('fileFactory', function($sce) {
 				console.log(coords);
 				factory.showableUrl = 'http://maps.googleapis.com/maps/api/staticmap?center='+coords+'&zoom='+factory.parsedURL.queryKey.z+'&size=640x300&scale=2';
 
+			/*
+				Evernote
+			*/
 			case 'www.evernote.com':
 				factory.provider = { name: 'Evernote', slug: 'evernote' };
 				factory.fileType = 'note';
@@ -111,14 +124,29 @@ app.factory('fileFactory', function($sce) {
 
 		// Als er nu nog steeds niks matcht
 		if(!factory.fileType) {
-			// Nieuwe Google Maps URLs worden niet goed verwerkt
 
+			// Nieuwe Google Maps URLs worden niet goed verwerkt
 			if(url.indexOf('www.google.com/maps') > -1) {
 				factory.provider = { name: 'Google Maps', slug: 'google-maps' };
 				factory.fileType = 'location';
 				var coords = factory.parsedURL.host.split(',');
 
 				factory.showableUrl =  'http://maps.googleapis.com/maps/api/staticmap?center='+coords[0]+','+coords[1]+'&zoom='+coords[2].substr(0, coords[2].length-1)+'&size=640x300&scale=2';
+			}else{
+				var fileParts = factory.parsedURL.file.split('.');
+				switch(fileParts[fileParts.length - 1].toLowerCase()) {
+
+					// Pictures
+					case 'jpg':
+					case 'jpeg':
+					case 'png':
+					case 'gif':
+					case 'tiff':
+						factory.provider = { name: 'Unknown Source', slug: 'unknown' };
+						factory.fileType = 'picture';
+						factory.showableUrl = url;
+						break;
+				}
 			}
 		}
 	};

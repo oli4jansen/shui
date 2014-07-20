@@ -115,7 +115,8 @@
 
 	<div class="item" ng-repeat="file in files | fileSelection: selection | filter: searchText">
 		<div class="icon-holder">
-			<a ng-href="{{file.url}}" target="_blank" class="icon logo {{file.provider.slug}}"></a>
+			<a ng-href="{{file.url}}" target="_blank" class="icon logo {{file.provider.slug}}" ng-if="file.provider.slug !== 'unknown'"></a>
+			<i class="ion-ios7-camera icon" ng-if="file.provider.slug == 'unknown'"></i>
 		</div>
 
 		<div class="body">

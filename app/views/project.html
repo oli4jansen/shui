@@ -88,7 +88,7 @@
 
 		<div class="body">
 	  		<strong>{{message.author.name}}</strong> {{message.author.email}} <a ng-if="message.author.email == userData.email" ng-click="deleteMessage(message)" class="delete-button ion-trash-b"></a>
-	    	<p class="medium">{{message.body}}</p>
+	    	<p class="medium whitespace-pre">{{message.body}}</p>
 		</div>
 	</div>
 
@@ -116,7 +116,7 @@
 	<div class="item" ng-repeat="file in files | fileSelection: selection | filter: searchText">
 		<div class="icon-holder">
 			<a ng-href="{{file.url}}" target="_blank" class="icon logo {{file.provider.slug}}" ng-if="file.provider.slug !== 'unknown'"></a>
-			<i class="ion-ios7-camera icon" ng-if="file.provider.slug == 'unknown'"></i>
+			<i class="ion-ios7-camera icon large" ng-if="file.provider.slug == 'unknown'"></i>
 		</div>
 
 		<div class="body">

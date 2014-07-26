@@ -34,7 +34,9 @@ app.directive('popup', function($rootScope, $timeout) {
       };
 
       scope.actionKey = function($event) {
-        if($event.keyCode == 13) scope.action();
+        if(!scope.data.head.callbackButtonOnly) {
+          if($event.keyCode == 13) scope.action();
+        }
       };
     }
   }

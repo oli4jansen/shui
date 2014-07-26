@@ -18,8 +18,6 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 
 			projectFactory.getProject($routeParams.id, function(project){
 				if(!project) $rootScope.navigate('');
-				console.log('Project [RAW]:');
-				console.log(project);
 
 				$scope.project = project;
 				$rootScope.pageTitle = false;
@@ -432,6 +430,7 @@ app.controller("projectController", function($scope, $rootScope, $timeout, $rout
 				cancel: 'Cancel',
 				action: 'Post message',
 				callbackData: true,
+				callbackButtonOnly: true,
 				callback: function(data) {
 					projectFactory.postNewMessage($scope.project.id, data.body, function(error, message) {
 						if(!error){

@@ -34,6 +34,7 @@ app.factory('projectFactory', function($http, $rootScope, userFactory, fileFacto
 			url: factory.API+'/projects'
 		}).success(function(data, status, headers, config){
 			factory.projects = data;
+			console.log('getProjects:');
 			console.log(data);
 			callback();
 		}).error(function(data, status, headers, config){
@@ -50,6 +51,8 @@ app.factory('projectFactory', function($http, $rootScope, userFactory, fileFacto
 			method: 'GET',
 			url: factory.API+'/projects/'+id
 		}).success(function(data, status, headers, config){
+			console.log('getProject '+id+':');
+			console.log(data);
 			callback(data);
 		}).error(function(data, status, headers, config){
 			callback(false);
@@ -77,6 +80,8 @@ app.factory('projectFactory', function($http, $rootScope, userFactory, fileFacto
 			method: 'GET',
 			url: factory.API+'/projects/'+projectId+'/messages'
 		}).success(function(data, status, headers, config){
+			console.log('getMessages('+projectId+'):');
+			console.log(data);
 			callback(data);
 		}).error(function(data, status, headers, config){
 			alert('Something went wrong while getting this project\'s messages.');
